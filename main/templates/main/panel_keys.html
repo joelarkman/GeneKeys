@@ -1,0 +1,170 @@
+{% extends 'main/base.html' %}
+
+
+{% block stylesheet %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.semanticui.min.css">
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.semanticui.min.js"></script>
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script>
+    $('.tables.menu .item').tab();
+
+    $.extend(true, $.fn.dataTable.defaults, {
+        "ordering": true
+    });
+
+    $(document).ready(function () {
+        $('#active-keys').DataTable();
+    });
+
+    $(document).ready(function () {
+        $('#archived-keys').DataTable();
+    });
+
+    $(document).ready(function () {
+        $('#gene-transcripts').DataTable({
+            "autoWidth": false
+        });
+    });
+</script>
+{% endblock javascript%}
+
+{% block content %}
+<div class="ui main container">
+
+    <!-- Constant Buttons -->
+    <div class="ui segment">
+        <div class="ui three item menu">
+            <a href="{% url 'add_key' panel.pk %}" class="item">Add key</a>
+            <a class="item">Pending keys</a>
+            <a class="item">Generate output files</a>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="ui mini two top attached steps">
+        <a class="step" href="{% url 'main-home' %}">
+            <div class="content">
+                <div class="title">Select Panel</div>
+            </div>
+        </a>
+        <div class="active step">
+            <div class="content">
+                <div class="title">{{ panel.name }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main section -->
+    <div class=" attached ui segment">
+
+        <!-- Panel information -->
+        <h1>{{ panel.name }} Panel</h1>
+        <p>{{ panel.description }}</p>
+
+
+        <!-- Tab menu -->
+        <div class="ui pointing secondary menu tables">
+            <a class="active item" data-tab="active-keys">Active keys</a>
+            <a class="item" data-tab="archived-keys">Archived keys</a>
+            <a class="item" data-tab="gene-transcripts">Gene/transcript list</a>
+        </div>
+
+        <!-- Active keys tab -->
+        <div class="ui tab" data-tab="active-keys">
+            <table id="active-keys" class="ui celled table" style="table-layout: fixed; width:100%">
+                <colgroup>
+                    <col style="width: auto;">
+                    <col style="width: auto;">
+                    <col style="width: auto;">
+                    <col style="width: auto;">
+                    <col style="width: 150px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Gene Key</th>
+                        <th>Genes</th>
+                        <th>Date Added</th>
+                        <th>Added by</th>
+                        <th>Archive</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in active_gene_keys %}
+                    <tr id="key_archived_{{ entry.id }}">
+                        <td data-label="Gene Key">{{ entry.gene_key }}</td>
+                        <td data-label="Genes">{{ entry.gene_names }}</td>
+                        <td data-label="Date Added">{{ entry.added_at }}</td>
+                        <td data-label="Added by">{{ entry.added_by }}</td>
+                        <td data-label="Archive" class="ui center aligned">
+                            <button class="ui negative button" type="button">Archive</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Archived keys tab -->
+        <div class="ui tab" data-tab="archived-keys">
+            <table id="archived-keys" class="ui celled table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Gene Key</th>
+                        <th>Genes</th>
+                        <th>Date Added</th>
+                        <th>Added by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in archived_gene_keys %}
+                    <tr>
+                        <td data-label="Gene Key">{{ entry.gene_key }}</td>
+                        <td data-label="Genes">{{ entry.gene_names }}</td>
+                        <td data-label="Date Added">{{ entry.added_at }}</td>
+                        <td data-label="Added by">{{ entry.added_by }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Gene/transcripts tab -->
+        <div class="ui tab" data-tab="gene-transcripts">
+            <table id="gene-transcripts" class="ui celled table" style="table-layout: fixed; width:100%">
+                <colgroup>
+                    <col style="width: auto;">
+                    <col style="width: auto;">
+                    <col style="width: 150px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Genes</th>
+                        <th>Selected Transcript</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in panel_genes %}
+                    <tr>
+                        <td data-label="Genes">{{ entry.gene }}</td>
+                        <td data-label="Selected Transcript">{{ entry.transcript }}</td>
+                        <td data-label="Edit" class="ui center aligned"><a href="#" class="ui primary button">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+
+{% endblock content %}

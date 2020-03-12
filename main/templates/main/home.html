@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<!-- Page topper -->
+<div class="ui inverted attached padded topper segment">
+    <div class="ui middle aligned center aligned grid">
+        <div class="row">
+            <h1 class="ui inverted header">
+                <i class="large key icon"></i>
+                WMRGL Gene Keys
+            </h1>
+        </div>
+        <div class="row">
+            <div class="ui floating message">
+                <div class="header">
+                    Welcome!
+                </div>
+                <p>Please select a sequencing chemistry.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Panel cards -->
+<div class="ui main container">
+    <div class="ui stretched three column grid">
+        {% for panel in panels %}
+        <div class="column">
+            <div class="ui fluid card">
+                <div class="content">
+                    <div class="header">{{panel.name}}</div>
+                    <div class="description">{{panel.description}}</div>
+                </div>
+                <a class="ui bottom attached button" href="{% url 'panel_keys' panel.pk %}">
+                    View Keys
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

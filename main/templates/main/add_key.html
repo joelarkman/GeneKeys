@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+{% load widget_tweaks %}
+
+{% block javascript %}
+<script>
+    $('.ui.dropdown')
+        .dropdown();
+</script>
+{% endblock javascript %}
+
+{% block content %}
+<div class="ui main container">
+    <div class="ui segment">
+        <form class="ui form" method='post'>
+            {% csrf_token %}
+
+            <div class="field">
+                {{ form.panel.label_tag }}
+                {% render_field form.panel class='ui selection dropdown'%}
+            </div>
+
+            <div class="field">
+                {{ form.gene_key.label_tag }}
+                {% render_field form.gene_key placeholder='Define a gene key' %}
+            </div>
+
+            <div class="field">
+                {{ form.genes.label_tag }}
+                <select name="genes" class="ui fluid search dropdown" required id="id_genes" multiple>
+                    <option value=''>Select Genes</option>
+                    {% for gene in form.genes %}
+                    {{gene}}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class='ui primary button'>Add</button>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock content %}

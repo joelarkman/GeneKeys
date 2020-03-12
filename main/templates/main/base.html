@@ -1,0 +1,56 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Standard Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Site Properties -->
+    {% if title %}
+    <title>Gene Keys - {{title}}</title>
+    {% else %}
+    <title>Gene Keys</title>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    {% block stylesheet %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/main.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist/semantic.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Main navigation menu -->
+    <div class="ui fixed inverted main menu">
+        <div class="ui container">
+            <a href="{% url 'main-home' %}" class="header item">
+                <i class=" large key icon"></i>WMRGL Gene Keys</a>
+            <div class="ui simple dropdown right item">Joe <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item" href="#">Change Password</a>
+                    <a class="item" href="#">Log out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden placeholder -->
+    <div class="ui inverted attached header">
+        <div class='ui container'>
+            <span class="header item">
+                <i class=" large key icon"></i>WMRGL Gene Keys</a>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+</body>
+
+
+{% block javascript %} {% endblock %}
+
+</html>
