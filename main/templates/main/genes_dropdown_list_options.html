@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for gene in genes %}
+<option value="{{ gene.pk }}">{{ gene.name }}</option>
+{% endfor %}

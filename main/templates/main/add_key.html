@@ -5,13 +5,47 @@
 <script>
     $('.ui.dropdown')
         .dropdown();
+
+    $(document).ready(function () {
+        var url = $("#genekeyForm").attr("data-genes-url");  // get the url of the `load_genes` view
+        var panelId = $("#id_panel").val();  // get the selected gene ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-genes/)
+            data: {
+                'panel': panelId       // add the gene id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_genes` view function
+                $("#id_genes").html(data);  // replace the contents of the gene input with the data that came from the server
+            }
+        });
+
+    });
+
+    $("#id_panel").change(function () {
+        var url = $("#genekeyForm").attr("data-genes-url");  // get the url of the `load_genes` view
+        var panelId = $(this).val();  // get the selected gene ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-genes/)
+            data: {
+                'panel': panelId       // add the gene id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_genes` view function
+                $("#id_genes").html(data);  // replace the contents of the gene input with the data that came from the server
+            }
+        });
+
+    });
 </script>
+
+
 {% endblock javascript %}
 
 {% block content %}
 <div class="ui main container">
     <div class="ui segment">
-        <form class="ui form" method='post'>
+        <form class="ui form" method='post' id="genekeyForm" data-genes-url="{% url 'ajax_load_genes' %}" novalidate>
             {% csrf_token %}
 
             <div class="field">
@@ -38,7 +72,6 @@
         </form>
     </div>
 </div>
-
 
 
 {% endblock content %}

@@ -14,23 +14,24 @@ class AddKeyForm(forms.ModelForm):
 
     genes = forms.ModelMultipleChoiceField(queryset=Gene.objects.all())
 
-    # Gene.objects.none(
-    # Gene.objects.all()
-    # Panel.objects.get(pk=panel).genes.all()
-
-    # Overriding __init__ here allows us to provide initial
-    # data for 'toppings' field
     def __init__(self, *args, **kwargs):
 
         if kwargs.get('instance'):
-            # We get the 'initial' keyword argument or initialize it
-            # as a dict if it didn't exist.
             initial = kwargs.setdefault('initial', {})
-            # The widget for a ModelMultipleChoiceField expects
-            # a list of primary key for the selected data.
             initial['genes'] = [t.pk for t in kwargs['instance'].genes.all()]
 
         forms.ModelForm.__init__(self, *args, **kwargs)
+        self.fields['genes'].queryset = Gene.objects.none()
+
+        if 'panel' in self.data:
+            try:
+                panel_id = int(self.data.get('panel'))
+                self.fields['genes'].queryset = Panel.objects.get(
+                    pk=panel_id).genes.all()
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['genes'].queryset = self.instance.panel.gene_set
 
     # Overriding save allows us to process the value of 'genes' field
     def save(self, commit=True):

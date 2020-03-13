@@ -41,6 +41,7 @@ def add_key(request, pk):
 
     if request.method == 'POST':
         form = AddKeyForm(request.POST)
+        form.panel = panel
         if form.is_valid():
             genekey = form.save(commit=False)
             #genekey.panel = panel
@@ -48,7 +49,7 @@ def add_key(request, pk):
             genekey.save()
             return redirect('panel_keys', pk=panel.pk)
     else:
-        form = AddKeyForm()
+        form = AddKeyForm(initial={'panel': pk})
 
     context = {
         'title': 'Add key',
@@ -56,3 +57,9 @@ def add_key(request, pk):
     }
 
     return render(request, 'main/add_key.html', context)
+
+
+def load_genes(request):
+    panel_id = request.GET.get('panel')
+    genes = Panel.objects.get(pk=panel_id).genes.all()
+    return render(request, 'main/genes_dropdown_list_options.html', {'genes': genes})
