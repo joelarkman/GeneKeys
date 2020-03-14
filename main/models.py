@@ -52,6 +52,9 @@ class GeneKey(models.Model):
     checked_by = models.ForeignKey(
         User, null=True, related_name='+', on_delete=SET_NULL, blank=True)
     archived = models.BooleanField(default=False)
+    archived_at = models.DateTimeField(null=True, blank=True)
+    archived_by = models.ForeignKey(
+        User, null=True, related_name='+', on_delete=SET_NULL, blank=True)
 
     def gene_names(self):
         return ', '.join([gene.name for gene in self.genes.all()])

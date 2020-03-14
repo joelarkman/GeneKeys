@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
+from datetime import datetime
 
 from .models import Panel, GeneKey, PanelGene, Gene
 from .forms import AddKeyForm
@@ -67,11 +68,14 @@ def load_genes(request):
 
 
 def key_archive(request, pk, key):
+    user = User.objects.first()
     panel = get_object_or_404(Panel, pk=pk)
     key = get_object_or_404(GeneKey, pk=key)
     data = dict()
     if request.method == 'POST':
         key.archived = True
+        key.archived_by = user
+        key.archived_at = datetime.now()
         key.save()
         # This is just to play along with the existing code
         data['form_is_valid'] = True
