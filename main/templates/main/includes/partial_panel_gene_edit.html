@@ -1,6 +1,8 @@
 <div class="active ui small modal">
     <div class="header">Set preferred transcript</div>
     <div class="content">
+        Select the preffered <b>{{panel_gene.gene}}</b> transcript to use for the <b>{{panel}}</b> panel.
+        <br><br>
         <form id='theform2' method="post" action="{% url 'panel_gene_edit' pk=panel.id panel_gene=panel_gene.id %}"
             class="js-edit-panel_gene-form">
             {% csrf_token %}
@@ -12,3 +14,10 @@
         <input type="submit" value="Set preferred transcript" form="theform2" class="ui primary button">
     </div>
 </div>
+
+<script>
+    $('.ui.dropdown')
+        .dropdown();
+
+    $('#search-select').dropdown({});
+</script>
