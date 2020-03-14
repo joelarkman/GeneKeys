@@ -1,0 +1,13 @@
+{% load widget_tweaks %}
+
+<div class="ui form">
+    {% for field in form %}
+    <div class="{% if field.errors %} field error{% endif %}">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {% render_field field class="form-control" %}
+        {% for error in field.errors %}
+        <p class="ui error message">{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>

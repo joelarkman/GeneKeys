@@ -1,0 +1,14 @@
+<div class="active ui small modal">
+    <div class="header">Set preferred transcript</div>
+    <div class="content">
+        <form id='theform2' method="post" action="{% url 'panel_gene_edit' pk=panel.id panel_gene=panel_gene.id %}"
+            class="js-edit-panel_gene-form">
+            {% csrf_token %}
+            {% include 'main/includes/partial_panel_gene_form.html' %}
+        </form>
+    </div>
+    <div class="actions">
+        <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
+        <input type="submit" value="Set preferred transcript" form="theform2" class="ui primary button">
+    </div>
+</div>

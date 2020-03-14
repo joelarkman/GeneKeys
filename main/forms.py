@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models.query import QuerySet
 
-from .models import Gene, GeneKey, Panel
+from .models import Gene, GeneKey, Panel, PanelGene
 
 
 class AddKeyForm(forms.ModelForm):
@@ -49,3 +49,9 @@ class AddKeyForm(forms.ModelForm):
         self.save_m2m()
 
         return instance
+
+
+class PanelGeneForm(forms.ModelForm):
+    class Meta:
+        model = PanelGene
+        fields = ('panel', 'gene', 'transcript')

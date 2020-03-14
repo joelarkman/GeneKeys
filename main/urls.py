@@ -8,5 +8,10 @@ urlpatterns = [
     path('ajax/load-genes/', views.load_genes, name='ajax_load_genes'),
 
     path('panels/<int:pk>/<int:key>/archive/',
-         views.key_archive, name='key_archive')
+         views.key_archive, name='key_archive'),
+
+    path('panels/<int:pk>/<int:panel_gene>/edit/',
+         views.panel_gene_edit, name='panel_gene_edit')
+
+
 ]

@@ -27,7 +27,7 @@
     });
 
     $(document).ready(function () {
-        $('#gene-transcripts').DataTable({
+        $('#panel-genes-table').DataTable({
             "autoWidth": false
         });
     });
@@ -64,6 +64,7 @@
                     if (data.form_is_valid) {
                         $("#active-keys-table tbody").html(data.html_key_list_active);
                         $("#archived-keys-table tbody").html(data.html_key_list_archived);
+                        $("#panel-genes-table tbody").html(data.html_key_list_archived);
                         $("#modal-keys").modal("hide");
                     }
                     else {
@@ -73,6 +74,9 @@
             });
             return false;
         };
+
+        $("#panel-genes-table").on("click", ".js-edit-panel_gene", loadForm);
+        $("#modal-keys").on("submit", ".js-edit-panel_gene-form", saveForm);
 
         $("#active-keys-table").on("click", ".js-archive-key", loadForm);
         $("#modal-keys").on("submit", ".js-key-archive-form", saveForm);
@@ -167,7 +171,7 @@
 
         <!-- Gene/transcripts tab -->
         <div class="ui tab" data-tab="gene-transcripts">
-            <table id="gene-transcripts" class="ui celled table" style="table-layout: fixed; width:100%">
+            <table id="panel-genes-table" class="ui celled table" style="table-layout: fixed; width:100%">
                 <colgroup>
                     <col style="width: auto;">
                     <col style="width: auto;">
@@ -181,14 +185,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for entry in panel_genes %}
-                    <tr>
-                        <td data-label="Genes">{{ entry.gene }}</td>
-                        <td data-label="Selected Transcript">{{ entry.transcript }}</td>
-                        <td data-label="Edit" class="ui center aligned"><a href="#" class="ui primary button">Edit</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                    {% include 'main/includes/partial_panel_gene_list.html' %}
                 </tbody>
             </table>
         </div>

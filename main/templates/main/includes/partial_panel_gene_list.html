@@ -1,0 +1,10 @@
+{% for panel_gene in panel_genes %}
+<tr>
+    <td data-label="Genes">{{ panel_gene.gene }}</td>
+    <td data-label="Selected Transcript">{{ panel_gene.transcript }}</td>
+    <td data-label="Edit" class="ui center aligned">
+        <button type='button' class="ui primary button js-edit-panel_gene"
+            data-url='{% url "panel_gene_edit" pk=panel.id panel_gene=panel_gene.id %}'>Edit</button>
+    </td>
+</tr>
+{% endfor %}
