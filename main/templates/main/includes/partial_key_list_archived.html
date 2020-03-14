@@ -1,0 +1,8 @@
+{% for entry in archived_gene_keys %}
+<tr>
+    <td data-label="Gene Key">{{ entry.gene_key }}</td>
+    <td data-label="Genes">{{ entry.gene_names }}</td>
+    <td data-label="Date Added">{{ entry.added_at }}</td>
+    <td data-label="Added by">{{ entry.added_by }}</td>
+</tr>
+{% endfor %}

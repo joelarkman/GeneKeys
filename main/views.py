@@ -1,7 +1,8 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
 
 from .models import Panel, GeneKey, PanelGene, Gene
 from .forms import AddKeyForm
@@ -63,3 +64,33 @@ def load_genes(request):
     panel_id = request.GET.get('panel')
     genes = Panel.objects.get(pk=panel_id).genes.all()
     return render(request, 'main/genes_dropdown_list_options.html', {'genes': genes})
+
+
+def key_archive(request, pk, key):
+    panel = get_object_or_404(Panel, pk=pk)
+    key = get_object_or_404(GeneKey, pk=key)
+    data = dict()
+    if request.method == 'POST':
+        key.archived = True
+        key.save()
+        # This is just to play along with the existing code
+        data['form_is_valid'] = True
+        active_gene_keys = GeneKey.objects.filter(
+            panel=panel.id).exclude(archived=True)
+        archived_gene_keys = GeneKey.objects.filter(
+            panel=panel.id).exclude(archived=False)
+        data['html_key_list_active'] = render_to_string('main/includes/partial_key_list_active.html', {
+            'panel': panel,
+            'active_gene_keys': active_gene_keys,
+        })
+        data['html_key_list_archived'] = render_to_string('main/includes/partial_key_list_archived.html', {
+            'panel': panel,
+            'archived_gene_keys': archived_gene_keys,
+        })
+    else:
+        context = {
+            'panel': panel,
+            'key': key}
+        data['html_form'] = render_to_string(
+            'main/includes/partial_key_archive.html', context, request=request)
+    return JsonResponse(data)

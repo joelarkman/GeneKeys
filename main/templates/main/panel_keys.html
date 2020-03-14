@@ -9,24 +9,73 @@
 
 {% block javascript %}
 <script>
-    $('.tables.menu .item').tab();
+    $('.tables.menu .item').tab({
+        alwaysRefresh: true,
+        cache: false,
+    });
 
     $.extend(true, $.fn.dataTable.defaults, {
         "ordering": true
     });
 
     $(document).ready(function () {
-        $('#active-keys').DataTable();
+        $('#active-keys-table').DataTable();
     });
 
     $(document).ready(function () {
-        $('#archived-keys').DataTable();
+        $('#archived-keys-table').DataTable();
     });
 
     $(document).ready(function () {
         $('#gene-transcripts').DataTable({
             "autoWidth": false
         });
+    });
+
+    $(function () {
+
+        /* Functions */
+
+        var loadForm = function () {
+            var btn = $(this);
+            $.ajax({
+                url: btn.attr("data-url"),
+                type: 'get',
+                dataType: 'json',
+                beforeSend: function () {
+                    $('#modal-keys').modal({
+                        centered: false
+                    }).modal('show');
+                },
+                success: function (data) {
+                    $("#modal-keys .modal-stuff").html(data.html_form);
+                }
+            });
+        };
+
+        var saveForm = function () {
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                data: form.serialize(),
+                type: form.attr("method"),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.form_is_valid) {
+                        $("#active-keys-table tbody").html(data.html_key_list_active);
+                        $("#archived-keys-table tbody").html(data.html_key_list_archived);
+                        $("#modal-keys").modal("hide");
+                    }
+                    else {
+                        $("#modal-keys .modal-stuff").html(data.html_form);
+                    }
+                }
+            });
+            return false;
+        };
+
+        $("#active-keys-table").on("click", ".js-archive-key", loadForm);
+        $("#modal-keys").on("submit", ".js-key-archive-form", saveForm);
     });
 </script>
 {% endblock javascript%}
@@ -74,7 +123,7 @@
 
         <!-- Active keys tab -->
         <div class="ui tab" data-tab="active-keys">
-            <table id="active-keys" class="ui celled table" style="table-layout: fixed; width:100%">
+            <table id="active-keys-table" class="ui celled table" style="table-layout: fixed; width:100%">
                 <colgroup>
                     <col style="width: auto;">
                     <col style="width: auto;">
@@ -92,24 +141,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for entry in active_gene_keys %}
-                    <tr id="key_archived_{{ entry.id }}">
-                        <td data-label="Gene Key">{{ entry.gene_key }}</td>
-                        <td data-label="Genes">{{ entry.gene_names }}</td>
-                        <td data-label="Date Added">{{ entry.added_at }}</td>
-                        <td data-label="Added by">{{ entry.added_by }}</td>
-                        <td data-label="Archive" class="ui center aligned">
-                            <button class="ui negative button" type="button">Archive</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                    {% include 'main/includes/partial_key_list_active.html' %}
                 </tbody>
             </table>
         </div>
 
         <!-- Archived keys tab -->
         <div class="ui tab" data-tab="archived-keys">
-            <table id="archived-keys" class="ui celled table" style="width:100%">
+            <table id="archived-keys-table" class="ui celled table" style="width:100%">
                 <thead>
                     <tr>
                         <th>Gene Key</th>
@@ -119,14 +158,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for entry in archived_gene_keys %}
-                    <tr>
-                        <td data-label="Gene Key">{{ entry.gene_key }}</td>
-                        <td data-label="Genes">{{ entry.gene_names }}</td>
-                        <td data-label="Date Added">{{ entry.added_at }}</td>
-                        <td data-label="Added by">{{ entry.added_by }}</td>
-                    </tr>
-                    {% endfor %}
+                    {% include 'main/includes/partial_key_list_archived.html' %}
                 </tbody>
             </table>
         </div>
@@ -160,11 +192,11 @@
         </div>
 
     </div>
-
-
-
 </div>
 
-
+<div id='modal-keys' class="ui small modal">
+    <div class="modal-stuff">
+    </div>
+</div>
 
 {% endblock content %}
