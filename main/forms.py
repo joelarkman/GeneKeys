@@ -54,4 +54,5 @@ class AddKeyForm(forms.ModelForm):
 class PanelGeneForm(forms.ModelForm):
     class Meta:
         model = PanelGene
-        fields = ('panel', 'gene', 'transcript')
+        fields = ('transcript',)
+        #fields = ('panel', 'gene', 'transcript')
