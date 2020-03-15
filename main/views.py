@@ -125,7 +125,7 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene):
     return JsonResponse(data)
 
 
-def panel_gene_edit(request, pk, key):
+def panel_gene_edit(request, pk, panel_gene):
     item = get_object_or_404(PanelGene, id=panel_gene)
     if request.method == 'POST':
         form = PanelGeneForm(request.POST, instance=item)
