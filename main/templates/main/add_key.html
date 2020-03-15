@@ -44,6 +44,15 @@
 
 {% block content %}
 <div class="ui main container">
+
+    <div class="ui segment">
+        <div class="ui three item menu">
+            <div class="active item">Add key</div>
+            <a class="item">Pending keys</a>
+            <a class="item">Generate output files</a>
+        </div>
+    </div>
+
     <div class="ui segment">
         <form class="ui form" method='post' id="genekeyForm" data-genes-url="{% url 'ajax_load_genes' %}" novalidate>
             {% csrf_token %}
@@ -67,8 +76,8 @@
                     {% endfor %}
                 </select>
             </div>
-
-            <button type="submit" class='ui primary button'>Add</button>
+            <a class="ui button" href="{% url 'panel_keys' panel.pk %}">Cancel </a>
+            <button type="submit" class='ui primary button'>Add key</button>
         </form>
     </div>
 </div>

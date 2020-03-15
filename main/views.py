@@ -56,6 +56,7 @@ def add_key(request, pk):
     context = {
         'title': 'Add key',
         'form': form,
+        'panel':panel
     }
 
     return render(request, 'main/add_key.html', context)
