@@ -10,6 +10,9 @@ urlpatterns = [
     path('panels/<int:pk>/<int:key>/archive/',
          views.key_archive, name='key_archive'),
 
+    path('panels/<int:pk>/<int:key>/comment/',
+         views.key_comment, name='key_comment'),
+
     path('panels/<int:pk>/<int:panel_gene>/edit/',
          views.panel_gene_edit, name='panel_gene_edit')
 

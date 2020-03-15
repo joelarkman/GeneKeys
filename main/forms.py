@@ -7,7 +7,12 @@ from .models import Gene, GeneKey, Panel, PanelGene
 class AddKeyForm(forms.ModelForm):
     class Meta:
         model = GeneKey
-        fields = ['panel', 'gene_key', 'genes']
+
+        widgets = {
+            'comment': forms.Textarea(attrs={'rows': 4, 'cols': 20}),
+        }
+
+        fields = ['panel', 'gene_key', 'genes', 'comment']
 
     panel = forms.ModelChoiceField(
         queryset=Panel.objects.all(), empty_label='Choose a panel')
@@ -55,4 +60,11 @@ class PanelGeneForm(forms.ModelForm):
     class Meta:
         model = PanelGene
         fields = ('transcript',)
-        #fields = ('panel', 'gene', 'transcript')
+        # fields = ('panel', 'gene', 'transcript')
+
+
+class KeyCommentForm(forms.ModelForm):
+    class Meta:
+        model = GeneKey
+        fields = ('comment',)
+        # fields = ('panel', 'gene', 'transcript')

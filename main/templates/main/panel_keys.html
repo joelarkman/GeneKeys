@@ -82,6 +82,9 @@
 
         $("#active-keys-table").on("click", ".js-archive-key", loadForm);
         $("#modal-keys").on("submit", ".js-key-archive-form", saveForm);
+
+        $("#active-keys-table").on("click", ".js-key-comment", loadForm);
+        $("#modal-keys").on("submit", ".js-key-comment-form", saveForm);
     });
 </script>
 {% endblock javascript%}

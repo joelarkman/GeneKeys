@@ -8,8 +8,8 @@
     <td data-label="Date">{{ key.checked_at|date:'d/m/Y' }}</td>
     <td data-label="Archive" class="">
         <div class="ui small vertical buttons">
-            <button type="button" class="ui button js-show_why-key"
-                data-url="{% url 'key_archive' pk=panel.id key=key.id %}">Comment</button>
+            <button type="button" class="ui button js-key-comment"
+                data-url="{% url 'key_comment' pk=panel.id key=key.id %}">Comment</button>
             <button type="button" class="ui negative button js-archive-key"
                 data-url="{% url 'key_archive' pk=panel.id key=key.id %}">Archive</button>
         </div>

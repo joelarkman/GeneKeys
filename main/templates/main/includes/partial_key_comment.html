@@ -1,0 +1,14 @@
+<div class="active ui small modal">
+    <div class="header">Comment for {{key}}</div>
+    <div class="content">
+        <form id='theform3' method="post" action="{% url 'key_comment' pk=panel.id key=key.id %}"
+            class="js-key-comment-form">
+            {% csrf_token %}
+            {% include 'main/includes/partial_key_comment_form.html' %}
+        </form>
+    </div>
+    <div class="actions">
+        <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
+        <input type="submit" value="Save" form="theform3" class="ui primary button">
+    </div>
+</div>

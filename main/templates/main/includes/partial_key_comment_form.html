@@ -1,0 +1,12 @@
+{% load widget_tweaks %}
+
+<div class="ui form">
+
+    <div class="field {% if field.errors %} error{% endif %}">
+        {% render_field form.comment %}
+        {% for error in form.comment.errors %}
+        <p class="ui error message">{{ error }}</p>
+        {% endfor %}
+    </div>
+
+</div>

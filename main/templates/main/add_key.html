@@ -57,17 +57,23 @@
         <form class="ui form" method='post' id="genekeyForm" data-genes-url="{% url 'ajax_load_genes' %}" novalidate>
             {% csrf_token %}
 
-            <div class="field">
+            <div class="field {% if form.panel.errors %} error{% endif %}">
                 {{ form.panel.label_tag }}
                 {% render_field form.panel class='ui selection dropdown'%}
+                {% for error in form.panel.errors %}
+                <p class="ui error message">{{ error }}</p>
+                {% endfor %}
             </div>
 
-            <div class="field">
+            <div class="field {% if form.gene_key.errors %} error{% endif %}">
                 {{ form.gene_key.label_tag }}
                 {% render_field form.gene_key placeholder='Define a gene key' %}
+                {% for error in form.gene_key.errors %}
+                <p class="ui error message">{{ error }}</p>
+                {% endfor %}
             </div>
 
-            <div class="field">
+            <div class="field {% if form.genes.errors %} error{% endif %}">
                 {{ form.genes.label_tag }}
                 <select name="genes" class="ui fluid search dropdown" required id="id_genes" multiple>
                     <option value=''>Select Genes</option>
@@ -75,6 +81,17 @@
                     {{gene}}
                     {% endfor %}
                 </select>
+                {% for error in form.genes.errors %}
+                <p class="ui error message">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="field {% if form.comment.errors %} error{% endif %}">
+                <label for="id_comment">Comment: <small>(Optional)</small></label>
+                {% render_field form.comment %}
+                {% for error in form.comment.errors %}
+                <p class="ui error message">{{ error }}</p>
+                {% endfor %}
             </div>
             <a class="ui button" href="{% url 'panel_keys' panel.pk %}">Cancel </a>
             <button type="submit" class='ui primary button'>Add key</button>
