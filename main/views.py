@@ -164,9 +164,19 @@ def save_key_comment_form(request, form, template_name, pk, key):
 
 
 def key_comment(request, pk, key):
+
     instance = get_object_or_404(GeneKey, pk=key)
     if request.method == 'POST':
         form = KeyCommentForm(request.POST, instance=instance)
     else:
         form = KeyCommentForm(instance=instance)
     return save_key_comment_form(request, form, 'main/includes/partial_key_comment.html', pk, key)
+
+def pending_keys(request, pk):
+    panel = get_object_or_404(Panel, pk=pk)
+
+    context = {
+        'panel': panel,
+    }
+
+    return render(request, 'main/pending_keys.html', context)

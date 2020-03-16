@@ -48,12 +48,25 @@
     <div class="ui segment">
         <div class="ui three item menu">
             <div class="active item">Add key</div>
-            <a class="item">Pending keys</a>
+            <a href="{% url 'pending_keys' panel.pk %}" class="item">Pending keys</a>
             <a class="item">Generate output files</a>
         </div>
     </div>
 
-    <div class="ui segment">
+    <div class="ui mini two top attached steps">
+        <a class="step" href="{% url 'main-home' %}">
+            <div class="content">
+                <div class="title">Select Panel</div>
+            </div>
+        </a>
+        <a class="step" href="{% url 'panel_keys' panel.pk %}">
+            <div class="content">
+                <div class="title">{{ panel.name }}</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="attached ui segment">
         <form class="ui form" method='post' id="genekeyForm" data-genes-url="{% url 'ajax_load_genes' %}" novalidate>
             {% csrf_token %}
 
@@ -87,13 +100,13 @@
             </div>
 
             <div class="field {% if form.comment.errors %} error{% endif %}">
-                <label for="id_comment">Comment: <small>(Optional)</small></label>
-                {% render_field form.comment %}
+                {{ form.comment.label_tag }}
+                {% render_field form.comment placeholder='Add a comment (Optional)'%}
                 {% for error in form.comment.errors %}
                 <p class="ui error message">{{ error }}</p>
                 {% endfor %}
             </div>
-            <a class="ui button" href="{% url 'panel_keys' panel.pk %}">Cancel </a>
+            <a class="ui button" href="javascript:window.history.back()">Cancel </a>
             <button type="submit" class='ui primary button'>Add key</button>
         </form>
     </div>

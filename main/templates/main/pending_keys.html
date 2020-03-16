@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="ui main container">
+
+    <div class="ui segment">
+        <div class="ui three item menu">
+            <a href="{% url 'add_key' panel.pk %}" class="item">Add key</a>
+            <div class="active item">Pending keys</div>
+            <a class="item">Generate output files</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
