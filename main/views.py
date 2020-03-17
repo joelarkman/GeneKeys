@@ -1,12 +1,14 @@
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
-from django.template import RequestContext
-from django.contrib.auth.models import User
-from django.template.loader import render_to_string
 from datetime import datetime
 
-from .models import Panel, GeneKey, PanelGene, Gene, Transcript
-from .forms import AddKeyForm, PanelGeneForm, KeyCommentForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template import RequestContext
+from django.template.loader import render_to_string
+
+from .forms import AddKeyForm, KeyCommentForm, PanelGeneForm
+from .models import Gene, GeneKey, Panel, PanelGene, Transcript
 
 
 def home(request):
@@ -36,7 +38,7 @@ def panel_keys(request, pk):
 
     return render(request, 'main/panel_keys.html', context)
 
-
+@login_required
 def add_key(request, pk):
     panel = get_object_or_404(Panel, pk=pk)
     user = User.objects.first()  # Fix this
@@ -172,10 +174,12 @@ def key_comment(request, pk, key):
         form = KeyCommentForm(instance=instance)
     return save_key_comment_form(request, form, 'main/includes/partial_key_comment.html', pk, key)
 
+@login_required
 def pending_keys(request, pk):
     panel = get_object_or_404(Panel, pk=pk)
 
     context = {
+        'title': 'Pending Keys',
         'panel': panel,
     }
 

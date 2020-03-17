@@ -1,0 +1,29 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Standard Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Site Properties -->
+    {% if title %}
+    <title>Gene Keys - {{title}}</title>
+    {% else %}
+    <title>Gene Keys</title>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    {% block stylesheet %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/accounts_base.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist/semantic.min.js"></script>
+</head>
+
+<body>      
+    {% block content %}{% endblock %}
+</body>
+
+</html>

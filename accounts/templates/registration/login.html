@@ -1,0 +1,58 @@
+{% extends "accounts_base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="ui middle aligned center aligned grid">
+    <div class="column">
+        <div class="ui attached black message">
+            <h1 class="ui header">
+                <i class="large key icon"></i>
+                WMRGL Gene Keys
+            </h1>
+        </div>
+
+        <div class="ui attached segment">
+
+            {% if next %}
+            {% if user.is_authenticated %}
+            <p class="ui error message">Your account doesn't have access to this page. To proceed,
+                please login with an account that has access.</p>
+            {% else %}
+            <p class="ui error message">Please login to see this page.</p>
+            {% endif %}
+            {% endif %}
+
+            <form class="ui large form" , method="post" , action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        {% render_field form.username placeholder='Username' %}
+                        {% for error in form.username.errors %}
+                        <p class="ui error message">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        {% render_field form.password placeholder='Password' %}
+                        {% for error in form.password.errors %}
+                        <p class="ui error message">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <input class="ui fluid large primary submit button" type="submit" value="Login" />
+                <input type="hidden" name="next" value="{{ next }}" />
+            </form>
+        </div>
+
+        <div class="ui bottom attached message">
+            New to us? <a href="{% url 'login' %}">Sign Up</a>
+            <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

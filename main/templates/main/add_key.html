@@ -88,8 +88,8 @@
 
             <div class="field {% if form.genes.errors %} error{% endif %}">
                 {{ form.genes.label_tag }}
-                <select name="genes" class="ui fluid search dropdown" required id="id_genes" multiple>
-                    <option value=''>Select Genes</option>
+                <select name="genes" class="ui fluid search three column dropdown" required id="id_genes" multiple>
+                    <option value=''>Search and select genes</option>
                     {% for gene in form.genes %}
                     {{gene}}
                     {% endfor %}
@@ -106,8 +106,12 @@
                 <p class="ui error message">{{ error }}</p>
                 {% endfor %}
             </div>
-            <a class="ui button" href="javascript:window.history.back()">Cancel </a>
+
+            <!-- Temporarily removed cancel button -->
+            <!-- <a class="ui button" href="javascript:window.history.back()">Cancel </a> -->
+
             <button type="submit" class='ui primary button'>Add key</button>
+
         </form>
     </div>
 </div>

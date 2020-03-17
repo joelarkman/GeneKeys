@@ -29,12 +29,22 @@
         <div class="ui container">
             <a href="{% url 'main-home' %}" class="header item">
                 <i class=" large key icon"></i>WMRGL Gene Keys</a>
-            <div class="ui simple dropdown right item">Joe <i class="dropdown icon"></i>
+            {% if user.is_authenticated %}
+            <div class="ui simple inverted dropdown right item">{{user.username}}<i class="dropdown icon"></i>
                 <div class="menu">
                     <a class="item" href="#">Change Password</a>
-                    <a class="item" href="#">Log out</a>
+                    <a class="item" href="{% url 'logout' %}">Log out</a>
                 </div>
             </div>
+            {% else %}
+            <div class="right menu">
+                <div class="item">
+                    <a href='{% url "login" %}' class="ui button">Log in</a>
+                    <a class="ui primary button" , style='margin-left: 8px;'>Sign up</a>
+                </div>
+
+            </div>
+            {% endif %}
         </div>
     </div>
 

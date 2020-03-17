@@ -2,7 +2,7 @@
 
 <div class="ui form">
 
-    <div class="field {% if field.errors %} error{% endif %}">
+    <div class="{% if not user.is_authenticated %} disabled {%endif%} field {% if field.errors %} error{% endif %}">
         {% render_field form.comment %}
         {% for error in form.comment.errors %}
         <p class="ui error message">{{ error }}</p>

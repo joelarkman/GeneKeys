@@ -27,15 +27,24 @@
     <div class="ui stretched three column grid">
         {% for panel in panels %}
         <div class="column">
-            <div class="ui fluid card">
+            <a class="ui fluid link card" href="{% url 'panel_keys' panel.pk %}">
                 <div class="content">
-                    <div class="header">{{panel.name}}</div>
-                    <div class="description">{{panel.description}}</div>
+                    <div class="center aligned header">
+                        <h1>{{panel.name}}</h1>
+                    </div>
                 </div>
-                <a class="ui bottom attached button" href="{% url 'panel_keys' panel.pk %}">
-                    View Keys
-                </a>
-            </div>
+
+                <!-- {% if panel.description %}
+                <div class="content">
+                    <div class="center aligned description">{{panel.description}}</div>
+                </div>
+                {% endif %} -->
+
+                <div class="center aligned extra content">
+                    Click to view keys
+                </div>
+                
+            </a>
         </div>
         {% endfor %}
     </div>
