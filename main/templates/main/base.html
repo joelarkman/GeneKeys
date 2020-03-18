@@ -25,14 +25,14 @@
 <body>
 
     <!-- Main navigation menu -->
-    <div class="ui fixed inverted main menu">
+    <div class="ui fixed inverted main menu" , style='background-color: #005EB8;'>
         <div class="ui container">
             <a href="{% url 'main-home' %}" class="header item">
                 <i class=" large key icon"></i>WMRGL Gene Keys</a>
             {% if user.is_authenticated %}
-            <div class="ui simple inverted dropdown right item">{{user.username}}<i class="dropdown icon"></i>
+            <div class="ui floating dropdown blue right item">{{user.username}}<i class="dropdown icon"></i>
                 <div class="menu">
-                    <a class="item" href="#">Change Password</a>
+                    <a class="item" href="{% url 'password_change' %}">Change Password</a>
                     <a class="item" href="{% url 'logout' %}">Log out</a>
                 </div>
             </div>
@@ -62,5 +62,10 @@
 
 
 {% block javascript %} {% endblock %}
+
+<script>
+    $('.ui.dropdown')
+        .dropdown();
+</script>
 
 </html>
