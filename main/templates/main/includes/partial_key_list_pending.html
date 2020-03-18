@@ -1,0 +1,14 @@
+{% for key in pending_gene_keys %}
+<tr class='warning' id="key_pending_{{ key.id }}">
+    <td data-label="Gene Key">{{ key.gene_key }}</td>
+    <td data-label="Genes">{{ key.gene_names }}</td>
+    <td data-label="Added by">{{ key.added_by }}</td>
+    <td data-label="Date">{{ key.added_at|date:'d/m/Y' }}</td>
+    <td data-label="Comment">{{ key.comment }}</td>
+    <td data-label="Accept" , class='right aligned'>
+        <button type="button"
+            class="ui positive button js-accept-key {% if user.is_authenticated and key.added_by == user %}disabled{%endif%}"
+            data-url="{% url 'key_accept' pk=panel.id key=key.id %}">Accept</button>
+    </td>
+</tr>
+{% endfor %}

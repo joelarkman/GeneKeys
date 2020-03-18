@@ -1,5 +1,71 @@
 {% extends 'main/base.html' %}
 
+{% block stylesheet %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.semanticui.min.css">
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.semanticui.min.js"></script>
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script>
+
+    $.extend(true, $.fn.dataTable.defaults, {
+        "ordering": false
+    });
+
+    $(document).ready(function () {
+        $('#pending-keys-table').DataTable({
+        });
+    });
+
+    $(function () {
+
+        var loadForm = function () {
+            var btn = $(this);
+            $.ajax({
+                url: btn.attr("data-url"),
+                type: 'get',
+                dataType: 'json',
+                beforeSend: function () {
+                    $('#modal-keys').modal({
+                        centered: false,
+                        autofocus: false
+                    }).modal('show');
+                },
+                success: function (data) {
+                    $("#modal-keys .modal-stuff").html(data.html_form);
+                }
+            });
+        };
+
+        var saveForm = function () {
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                data: form.serialize(),
+                type: form.attr("method"),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.form_is_valid) {
+                        $("#pending-keys-table tbody").html(data.html_key_list_pending);
+                        $("#modal-keys").modal("hide");
+                    }
+                    else {
+                        $("#modal-keys .modal-stuff").html(data.html_form);
+                    }
+                }
+            });
+            return false;
+        };
+
+
+        $("#pending-keys-table").on("click", ".js-accept-key", loadForm);
+        $("#modal-keys").on("submit", ".js-key-accept-form", saveForm);
+
+    });
+</script>
+{% endblock javascript%}
+
 {% block content %}
 <div class="ui main container">
 
@@ -11,6 +77,59 @@
         </div>
     </div>
 
+    <div class="ui mini two top attached steps">
+        <a class="step" href="{% url 'main-home' %}">
+            <div class="content">
+                <div class="title">Select Panel</div>
+            </div>
+        </a>
+        <a class="step" href="{% url 'panel_keys' panel.pk %}">
+            <div class="content">
+                <div class="title">{{ panel.name }}</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="attached ui segment">
+        <h1>Pending Keys</h1>
+
+        <div class="ui warning message">
+            <div class="header">
+                Please Note!
+            </div>
+            <p>Keys cannot be accepted by the same user that added them.</p>
+        </div>
+
+        <table id="pending-keys-table" class="ui striped celled table" style="width:100%">
+            <colgroup>
+                <col style="width: auto;">
+                <col style="width: 270px;">
+                <col style="width: auto;">
+                <col style="width: auto;">
+                <col style="width: auto;">
+                <col style="width: 116.5px;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Gene Key</th>
+                    <th>Genes</th>
+                    <th>Added by</th>
+                    <th>Date</th>
+                    <th>Comment</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% include 'main/includes/partial_key_list_pending.html' %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div id='modal-keys' class="ui small modal">
+    <div class="modal-stuff">
+    </div>
 </div>
 
 {% endblock content %}

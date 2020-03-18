@@ -23,9 +23,10 @@ def home(request):
 
 def panel_keys(request, pk):
     panel = get_object_or_404(Panel, pk=pk)
-    active_gene_keys = GeneKey.objects.filter(panel=pk).exclude(archived=True)
+    active_gene_keys = GeneKey.objects.filter(
+        panel=pk).exclude(archived=True).exclude(checked=False)
     archived_gene_keys = GeneKey.objects.filter(
-        panel=pk).exclude(archived=False)
+        panel=pk).exclude(archived=False).exclude(checked=False)
     panel_genes = PanelGene.objects.filter(panel=pk)
 
     context = {
@@ -38,10 +39,11 @@ def panel_keys(request, pk):
 
     return render(request, 'main/panel_keys.html', context)
 
+
 @login_required
 def add_key(request, pk):
     panel = get_object_or_404(Panel, pk=pk)
-    user = User.objects.first()  # Fix this
+    user = request.user  # Fix this
 
     if request.method == 'POST':
         form = AddKeyForm(request.POST)
@@ -71,7 +73,7 @@ def load_genes(request):
 
 
 def key_archive(request, pk, key):
-    user = User.objects.first()
+    user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     key = get_object_or_404(GeneKey, pk=key)
     data = dict()
@@ -83,9 +85,9 @@ def key_archive(request, pk, key):
         # This is just to play along with the existing code
         data['form_is_valid'] = True
         active_gene_keys = GeneKey.objects.filter(
-            panel=panel.id).exclude(archived=True)
+            panel=panel.id).exclude(archived=True).exclude(checked=False)
         archived_gene_keys = GeneKey.objects.filter(
-            panel=panel.id).exclude(archived=False)
+            panel=panel.id).exclude(archived=False).exclude(checked=False)
         data['html_key_list_active'] = render_to_string('main/includes/partial_key_list_active.html', {
             'panel': panel,
             'active_gene_keys': active_gene_keys,
@@ -149,7 +151,7 @@ def save_key_comment_form(request, form, template_name, pk, key):
             form.save()
             data['form_is_valid'] = True
             active_gene_keys = GeneKey.objects.filter(
-                panel=panel.id).exclude(archived=True)
+                panel=panel.id).exclude(archived=True).exclude(checked=False)
             data['html_key_list_active'] = render_to_string('main/includes/partial_key_list_active.html', {
                 'panel': panel,
                 'active_gene_keys': active_gene_keys,
@@ -174,13 +176,42 @@ def key_comment(request, pk, key):
         form = KeyCommentForm(instance=instance)
     return save_key_comment_form(request, form, 'main/includes/partial_key_comment.html', pk, key)
 
+
 @login_required
 def pending_keys(request, pk):
     panel = get_object_or_404(Panel, pk=pk)
+    pending_gene_keys = GeneKey.objects.all().exclude(checked=True)
 
     context = {
         'title': 'Pending Keys',
         'panel': panel,
+        'pending_gene_keys': pending_gene_keys
     }
 
     return render(request, 'main/pending_keys.html', context)
+
+
+def key_accept(request, pk, key):
+    user = request.user
+    panel = get_object_or_404(Panel, pk=pk)
+    key = get_object_or_404(GeneKey, pk=key)
+    data = dict()
+    if request.method == 'POST':
+        key.checked = True
+        key.checked_by = user
+        key.checked_at = datetime.now()
+        key.save()
+        # This is just to play along with the existing code
+        data['form_is_valid'] = True
+        pending_gene_keys = GeneKey.objects.all().exclude(checked=True)
+        data['html_key_list_pending'] = render_to_string('main/includes/partial_key_list_pending.html', {
+            'panel': panel,
+            'pending_gene_keys': pending_gene_keys,
+        })
+    else:
+        context = {
+            'panel': panel,
+            'key': key}
+        data['html_form'] = render_to_string(
+            'main/includes/partial_key_accept.html', context, request=request)
+    return JsonResponse(data)

@@ -17,7 +17,10 @@ urlpatterns = [
          views.key_comment, name='key_comment'),
 
     path('panels/<int:pk>/<int:panel_gene>/edit/',
-         views.panel_gene_edit, name='panel_gene_edit')
+         views.panel_gene_edit, name='panel_gene_edit'),
+
+    path('panels/<int:pk>/pendingkeys/<int:key>/accept',
+         views.key_accept, name='key_accept'),
 
 
 ]

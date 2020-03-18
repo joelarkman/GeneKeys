@@ -1,0 +1,14 @@
+<div class="active ui small modal">
+    <div class="header">Accept Gene Key</div>
+    <div class="content">
+        <form id='theform4' method="post" action="{% url 'key_accept' pk=panel.id key=key.id %}"
+            class="js-key-accept-form">
+            {% csrf_token %}
+            <p> Are you sure you want to accept <strong>'{{ key }}'</strong> ?</p>
+        </form>
+    </div>
+    <div class="actions">
+        <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
+        <input type="submit" value="Accept Gene Key" form="theform4" class="ui positive button">
+    </div>
+</div>
