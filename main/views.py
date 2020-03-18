@@ -53,7 +53,7 @@ def add_key(request, pk):
             #genekey.panel = panel
             genekey.added_by = user
             genekey.save()
-            return redirect('panel_keys', pk=panel.pk)
+            return redirect('pending_keys', pk=panel.pk)
     else:
         form = AddKeyForm(initial={'panel': pk})
 
@@ -91,15 +91,18 @@ def key_archive(request, pk, key):
         data['html_key_list_active'] = render_to_string('main/includes/partial_key_list_active.html', {
             'panel': panel,
             'active_gene_keys': active_gene_keys,
+            'user':user,
         })
         data['html_key_list_archived'] = render_to_string('main/includes/partial_key_list_archived.html', {
             'panel': panel,
             'archived_gene_keys': archived_gene_keys,
+            'user':user
         })
     else:
         context = {
             'panel': panel,
-            'key': key}
+            'key': key,
+            'user':user}
         data['html_form'] = render_to_string(
             'main/includes/partial_key_archive.html', context, request=request)
     return JsonResponse(data)
@@ -143,6 +146,7 @@ def panel_gene_edit(request, pk, panel_gene):
 
 
 def save_key_comment_form(request, form, template_name, pk, key):
+    user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     key = get_object_or_404(GeneKey, pk=key)
     data = dict()
@@ -155,13 +159,15 @@ def save_key_comment_form(request, form, template_name, pk, key):
             data['html_key_list_active'] = render_to_string('main/includes/partial_key_list_active.html', {
                 'panel': panel,
                 'active_gene_keys': active_gene_keys,
-                'key': key
+                'key': key,
+                'user':user
             })
         else:
             data['form_is_valid'] = False
     context = {'panel': panel,
                'key': key,
-               'form': form}
+               'form': form,
+               'user':user}
     data['html_form'] = render_to_string(
         template_name, context, request=request)
     return JsonResponse(data)
