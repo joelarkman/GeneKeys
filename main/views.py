@@ -1,5 +1,5 @@
+import xlwt
 from datetime import datetime
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
@@ -228,3 +228,60 @@ def key_accept(request, pk, key):
         data['html_form'] = render_to_string(
             'main/includes/partial_key_accept.html', context, request=request)
     return JsonResponse(data)
+
+
+def generate_output(request,pk):
+    
+    panel = get_object_or_404(Panel, pk=pk)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{panel}_Gene_Index.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('diagnostic_request_dictionary')
+    ws2 = wb.add_sheet('selected_transcript')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    # First Sheet
+    columns = ['Key', 'Gene list', 'Panel',
+               'Added by', 'Date', 'Checked by', 'Date', ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Second Sheet
+    columns2 = ['Transcript', 'Gene', ]
+
+    for col_num in range(len(columns2)):
+        ws2.write(row_num, col_num, columns2[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    active_gene_keys = GeneKey.objects.filter(
+        panel=panel).exclude(archived=True).exclude(checked=False).order_by('-added_at')
+
+    for row in active_gene_keys:
+        row_num += 1
+        ws.write(row_num, 0, row.gene_key, font_style)
+        ws.write(row_num, 1, row.gene_names(), font_style)
+        ws.write(row_num, 2, row.panel.name, font_style)
+        ws.write(row_num, 3, row.added_by.username, font_style)
+        ws.write(row_num, 4, row.added_at.strftime('%d/%m/%Y'), font_style)
+        ws.write(row_num, 5, row.checked_by.username, font_style)
+        ws.write(row_num, 6, row.checked_at.strftime('%d/%m/%Y'), font_style)
+
+    panel_genes = PanelGene.objects.filter(panel=panel)
+
+    row_num = 0
+    for row in panel_genes:
+        row_num += 1
+        ws2.write(row_num, 0, row.transcript.name, font_style)
+        ws2.write(row_num, 1, row.gene.name, font_style)
+
+    wb.save(response)
+    return response
