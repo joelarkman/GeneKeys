@@ -236,6 +236,7 @@ def generate_output(request, pk):
     panels = Panel.objects.all()
 
     context = {
+        'title':'Generate output files',
         'panel': panel,
         'panels': panels
     }
