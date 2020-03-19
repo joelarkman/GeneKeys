@@ -6,7 +6,9 @@ urlpatterns = [
     path('panels/<int:pk>/', views.panel_keys, name='panel_keys'),
     path('panels/<int:pk>/addkey/', views.add_key, name='add_key'),
 
-    path('output/<int:pk>', views.generate_output, name='generate_output'),
+    path('panels/<int:pk>/generate_output/', views.generate_output, name='generate_output'),
+
+    path('export/<int:pk>', views.generate_excel, name='generate_excel'),
 
 
     path('ajax/load-genes/', views.load_genes, name='ajax_load_genes'),

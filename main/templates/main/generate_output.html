@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="ui main container">
+
+    <div class="ui segment">
+        <div class="ui three item menu">
+            <a href="{% url 'add_key' panel.pk %}" class="item">Add key</a>
+            <a href="{% url 'pending_keys' panel.pk %}" class="item" class="item">Pending keys</a>
+            <div class="active item">Generate output files</div>
+        </div>
+    </div>
+
+    <div class="ui mini two top attached steps">
+        <a class="step" href="{% url 'main-home' %}">
+            <div class="content">
+                <div class="title">Select Panel</div>
+            </div>
+        </a>
+        <a class="step" href="{% url 'panel_keys' panel.pk %}">
+            <div class="content">
+                <div class="title">{{ panel.name }}</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="attached ui segment">
+        <h1>Generate output files</h1>
+
+        <div class="ui message">
+            <p>Please select a panel to download an updated Gene Index file.</p>
+        </div>
+
+        <div class="ui stretched four column grid">
+            {% for panel in panels %}
+            <div class="column">
+                <a class="ui fluid card" href="{% url 'generate_excel' panel.pk %}">
+                    <div class="content">
+                        <div class="center aligned header">
+                            <h2>{{panel.name}}</h2>
+                        </div>
+                    </div>
+    
+                    <div class="center aligned extra content">
+                        Click to download
+                    </div>
+    
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}

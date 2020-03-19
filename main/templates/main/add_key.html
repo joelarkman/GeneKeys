@@ -49,7 +49,7 @@
         <div class="ui three item menu">
             <div class="active item">Add key</div>
             <a href="{% url 'pending_keys' panel.pk %}" class="item">Pending keys</a>
-            <a class="item">Generate output files</a>
+            <a href="{% url 'generate_output' panel.pk %}" class="item">Generate output files</a>
         </div>
     </div>
 
@@ -67,6 +67,7 @@
     </div>
 
     <div class="attached ui segment">
+        <h1>Add key</h1>
         <form class="ui form" method='post' id="genekeyForm" data-genes-url="{% url 'ajax_load_genes' %}" novalidate>
             {% csrf_token %}
 

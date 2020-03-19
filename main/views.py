@@ -230,8 +230,21 @@ def key_accept(request, pk, key):
     return JsonResponse(data)
 
 
-def generate_output(request,pk):
-    
+@login_required
+def generate_output(request, pk):
+    panel = get_object_or_404(Panel, pk=pk)
+    panels = Panel.objects.all()
+
+    context = {
+        'panel': panel,
+        'panels': panels
+    }
+
+    return render(request, 'main/generate_output.html', context)
+
+
+def generate_excel(request, pk):
+
     panel = get_object_or_404(Panel, pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{panel}_Gene_Index.xls"'
