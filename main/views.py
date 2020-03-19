@@ -91,24 +91,25 @@ def key_archive(request, pk, key):
         data['html_key_list_active'] = render_to_string('main/includes/partial_key_list_active.html', {
             'panel': panel,
             'active_gene_keys': active_gene_keys,
-            'user':user,
+            'user': user,
         })
         data['html_key_list_archived'] = render_to_string('main/includes/partial_key_list_archived.html', {
             'panel': panel,
             'archived_gene_keys': archived_gene_keys,
-            'user':user
+            'user': user
         })
     else:
         context = {
             'panel': panel,
             'key': key,
-            'user':user}
+            'user': user}
         data['html_form'] = render_to_string(
             'main/includes/partial_key_archive.html', context, request=request)
     return JsonResponse(data)
 
 
 def save_panel_gene_form(request, form, template_name, pk, panel_gene):
+    user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     panel_gene = get_object_or_404(PanelGene, id=panel_gene)
     data = dict()
@@ -120,11 +121,13 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene):
             data['html_panel_gene_list'] = render_to_string('main/includes/partial_panel_gene_list.html', {
                 'panel': panel,
                 'panel_gene': panel_gene,
-                'panel_genes': panel_genes
+                'panel_genes': panel_genes,
+                'user': user
             })
         else:
             data['form_is_valid'] = False
-    context = {'panel': panel,
+    context = {'user': user,
+               'panel': panel,
                'panel_gene': panel_gene,
                'form': form}
     data['html_form'] = render_to_string(
@@ -160,14 +163,14 @@ def save_key_comment_form(request, form, template_name, pk, key):
                 'panel': panel,
                 'active_gene_keys': active_gene_keys,
                 'key': key,
-                'user':user
+                'user': user
             })
         else:
             data['form_is_valid'] = False
     context = {'panel': panel,
                'key': key,
                'form': form,
-               'user':user}
+               'user': user}
     data['html_form'] = render_to_string(
         template_name, context, request=request)
     return JsonResponse(data)
