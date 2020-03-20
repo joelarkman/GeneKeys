@@ -74,14 +74,15 @@
             <div class="field {% if form.panel.errors %} error{% endif %}">
                 {{ form.panel.label_tag }}
                 {% render_field form.panel class='ui selection dropdown'%}
-                {% if form.panel.errors %}
-                <div class="ui error message">
-                    <div class="ui bulleted list">
-                        {% for error in form.panel.errors %}
-                        <div class="item">{{error}}</div>
-                        {% endfor%}
-                    </div>
-                </div>
+
+                {% for error in form.panel.errors %}
+                <span class='ui red small text' style="text-align: left">{{error}}</span>
+                {% endfor%}
+
+                <br>
+
+                {% if form.panel.help_text %}
+                <span class='ui grey small text' style="text-align: left"> {{ form.panel.help_text }} </span>
                 {% endif %}
 
             </div>
@@ -89,15 +90,17 @@
             <div class="field {% if form.gene_key.errors %} error{% endif %}">
                 {{ form.gene_key.label_tag }}
                 {% render_field form.gene_key placeholder='Define a gene key' %}
-                {% if form.gene_key.errors %}
-                <div class="ui error message">
-                    <div class="ui bulleted list">
-                        {% for error in form.gene_key.errors %}
-                        <div class="item">{{error}}</div>
-                        {% endfor%}
-                    </div>
-                </div>
+                
+                {% for error in form.gene_key.errors %}
+                <span class='ui red small text' style="text-align: left">{{error}}</span>
+                {% endfor%}
+
+                <br>
+
+                {% if form.gene_key.help_text %}
+                <span class='ui grey small text' style="text-align: left"> {{ form.gene_key.help_text }} </span>
                 {% endif %}
+
             </div>
 
             <div class="field {% if form.genes.errors %} error{% endif %}">
@@ -108,29 +111,32 @@
                     {{gene}}
                     {% endfor %}
                 </select>
-                {% if form.genes.errors %}
-                <div class="ui error message">
-                    <div class="ui bulleted list">
-                        {% for error in form.genes.errors %}
-                        <div class="item">{{error}}</div>
-                        {% endfor%}
-                    </div>
-                </div>
+
+                {% for error in form.genes.errors %}
+                <span class='ui red small text' style="text-align: left">{{error}}</span>
+                {% endfor%}
+
+                <br>
+
+                {% if form.genes.help_text %}
+                <span class='ui grey small text' style="text-align: left"> {{ form.genes.help_text }} </span>
                 {% endif %}
             </div>
 
             <div class="field {% if form.comment.errors %} error{% endif %}">
                 {{ form.comment.label_tag }}
                 {% render_field form.comment placeholder='Add a comment (Optional)'%}
-                {% if form.comment.errors %}
-                <div class="ui error message">
-                    <div class="ui bulleted list">
-                        {% for error in form.comment.errors %}
-                        <div class="item">{{error}}</div>
-                        {% endfor%}
-                    </div>
-                </div>
+
+                {% for error in form.comment.errors %}
+                <span class='ui red small text' style="text-align: left">{{error}}</span>
+                {% endfor%}
+
+                <br>
+
+                {% if form.comment.help_text %}
+                <span class='ui grey small text' style="text-align: left"> {{ form.comment.help_text }} </span>
                 {% endif %}
+
             </div>
 
             <!-- Temporarily removed cancel button -->
