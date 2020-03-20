@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.semanticui.min.css">
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.semanticui.min.js"></script>
+
 {% endblock stylesheet %}
 
 {% block javascript %}
@@ -21,7 +22,9 @@
     });
 
     $.extend(true, $.fn.dataTable.defaults, {
-        "ordering": false
+        "ordering": false,
+        "pageLength": 15,
+        "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]]
     });
 
     $(document).ready(function () {
