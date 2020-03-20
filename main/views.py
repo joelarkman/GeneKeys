@@ -177,7 +177,6 @@ def save_key_comment_form(request, form, template_name, pk, key):
 
 
 def key_comment(request, pk, key):
-
     instance = get_object_or_404(GeneKey, pk=key)
     if request.method == 'POST':
         form = KeyCommentForm(request.POST, instance=instance)
@@ -245,7 +244,6 @@ def generate_output(request, pk):
 
 
 def generate_excel(request, pk):
-
     panel = get_object_or_404(Panel, pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{panel}_Gene_Index.xls"'
@@ -276,6 +274,7 @@ def generate_excel(request, pk):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
 
+    # First Sheet
     active_gene_keys = GeneKey.objects.filter(
         panel=panel).exclude(archived=True).exclude(checked=False).order_by('-added_at')
 
@@ -289,6 +288,7 @@ def generate_excel(request, pk):
         ws.write(row_num, 5, row.checked_by.username, font_style)
         ws.write(row_num, 6, row.checked_at.strftime('%d/%m/%Y'), font_style)
 
+    # Second Sheet
     panel_genes = PanelGene.objects.filter(panel=panel)
 
     row_num = 0
@@ -297,5 +297,6 @@ def generate_excel(request, pk):
         ws2.write(row_num, 0, row.transcript.name, font_style)
         ws2.write(row_num, 1, row.gene.name, font_style)
 
+    # Save excel document
     wb.save(response)
     return response

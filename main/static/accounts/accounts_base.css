@@ -5,9 +5,11 @@ body {
   body > .grid {
     height: 100%;
   }
+
   .image {
     margin-top: -100px;
   }
+  
   .column {
     max-width: 480px;
   }

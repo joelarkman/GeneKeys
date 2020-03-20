@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class Panel(models.Model):
     name = models.CharField(max_length=10, unique=True)
-    description = models.CharField(max_length=100, blank=True)
+    description = models.TextField(null=True, blank=True)
     genes = models.ManyToManyField(
         'Gene', through='PanelGene', related_name='Panels')
 
@@ -42,7 +42,7 @@ class PanelGene(models.Model):
 class GeneKey(models.Model):
     panel = models.ForeignKey(
         'panel', related_name='GeneKey', on_delete=models.CASCADE)
-    gene_key = models.CharField(max_length=10, unique=True)
+    gene_key = models.CharField(max_length=20, unique=True)
     genes = models.ManyToManyField('Gene', related_name='gene_keys')
     added_at = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(

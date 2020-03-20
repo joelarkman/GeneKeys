@@ -6,7 +6,7 @@
     <td data-label="Date">{{ key.added_at|date:'d/m/Y' }}</td>
     <td data-label="Checked by">{{ key.checked_by }}</td>
     <td data-label="Date">{{ key.checked_at|date:'d/m/Y' }}</td>
-    <td data-label="Archive" class="">
+    <td data-label="" class="">
         <div class="ui small vertical buttons">
             <button type="button" class="ui button js-key-comment"
                 data-url="{% url 'key_comment' pk=panel.id key=key.id %}">Comment</button>

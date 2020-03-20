@@ -23,7 +23,7 @@ class AddKeyForm(forms.ModelForm):
 
         if kwargs.get('instance'):
             initial = kwargs.setdefault('initial', {})
-            initial['genes'] = [t.pk for t in kwargs['instance'].genes.all()]
+            initial['genes'] = [gene.pk for gene in kwargs['instance'].genes.all()]
 
         forms.ModelForm.__init__(self, *args, **kwargs)
         self.fields['genes'].queryset = Gene.objects.none()
@@ -34,9 +34,9 @@ class AddKeyForm(forms.ModelForm):
                 self.fields['genes'].queryset = Panel.objects.get(
                     pk=panel_id).genes.all()
             except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk:
-            self.fields['genes'].queryset = self.instance.panel.gene_set
+                pass  # invalid input from the client; ignore and fallback to empty queryset
+        # elif self.instance.pk:
+        #     self.fields['genes'].queryset = self.instance.panel.gene_set
 
     # Overriding save allows us to process the value of 'genes' field
     def save(self, commit=True):
