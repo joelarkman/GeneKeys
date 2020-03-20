@@ -1,0 +1,111 @@
+{% extends "accounts_base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} - Signup{% endblock title %}
+
+{% block content %}
+<div class="ui middle aligned center aligned grid">
+    <div class="column">
+        <div class="ui attached black message" style='background-color: #005EB8;'>
+            <h1 class="ui header">
+                <i class="large key icon"></i>
+                WMRGL Gene Keys
+            </h1>
+        </div>
+
+        <div class="ui attached segment">
+
+            <form class="ui form" method='post' novalidate>
+                {% csrf_token %}
+
+
+                <div class="field {% if form.username.errors %} error{% endif %}">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        {% render_field form.username placeholder='Username' %}
+                    </div>
+
+                    {% for error in form.username.errors %}
+                    <span class='ui red small text' style="text-align: left">{{error}}</span>
+                    {% endfor%}
+
+                    <br>
+
+                    {% if form.username.help_text %}
+                    <span class='ui grey small text' style="text-align: left"> {{ form.username.help_text }} </span>
+                    {% endif %}
+
+                </div>
+
+                <div class="field {% if form.email.errors %} error{% endif %}">
+                    <div class="ui left icon input">
+                        <i class="envelope icon"></i>
+                        {% render_field form.email placeholder='Email address' %}
+                    </div>
+
+                    {% for error in form.email.errors %}
+                    <span class='ui red small text' style="text-align: left">{{error}}</span>
+                    {% endfor%}
+
+                    <br>
+
+                    {% if form.email.help_text %}
+                    <span class='ui grey small text' style="text-align: left"> {{ form.email.help_text }} </span>
+                    {% endif %}
+
+                </div>
+
+                <div class="field {% if form.password1.errors %} error{% endif %}">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        {% render_field form.password1 placeholder='Password' %}
+                    </div>
+
+                    {% for error in form.password1.errors %}
+                    <span class='ui red small text' style="text-align: left">{{error}}</span>
+                    {% endfor%}
+
+                    <br>
+
+                    {% if form.password1.help_text %}
+                    <span class='ui grey small text' style="text-align: left"> {{ form.password1.help_text }} </span>
+                    {% endif %}
+
+                </div>
+
+                <div class="field {% if form.password2.errors %} error{% endif %}">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        {% render_field form.password2 placeholder='Password confirmation' %}
+                    </div>
+
+                    {% for error in form.password2.errors %}
+                    <span class='ui red small text' style="text-align: left">{{error}}</span>
+                    {% endfor%}
+
+                    <br>
+
+                    {% if form.password2.help_text %}
+                    <span class='ui grey small text' style="text-align: left"> {{ form.password2.help_text }} </span>
+                    {% endif %}
+
+                </div>
+
+                <input class="ui fluid large primary submit button" type="submit" value="Signup" />
+
+            </form>
+
+
+
+            <!--         <div class="ui bottom attached message">
+            <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+            <div class="ui horizontal divider">
+                Or
+            </div>
+            New to us? <a href="{% url 'login' %}">Sign Up</a>
+        </div> -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}

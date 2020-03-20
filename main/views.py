@@ -10,6 +10,10 @@ from django.template.loader import render_to_string
 from .forms import AddKeyForm, KeyCommentForm, PanelGeneForm
 from .models import Gene, GeneKey, Panel, PanelGene, Transcript
 
+######################
+##### Main Views #####
+######################
+
 
 def home(request):
     panels = Panel.objects.all()
@@ -235,7 +239,7 @@ def generate_output(request, pk):
     panels = Panel.objects.all()
 
     context = {
-        'title':'Generate output files',
+        'title': 'Generate output files',
         'panel': panel,
         'panels': panels
     }
