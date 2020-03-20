@@ -79,9 +79,8 @@
                 <span class='ui red small text' style="text-align: left">{{error}}</span>
                 {% endfor%}
 
-                <br>
-
                 {% if form.panel.help_text %}
+                <br>
                 <span class='ui grey small text' style="text-align: left"> {{ form.panel.help_text }} </span>
                 {% endif %}
 
@@ -90,14 +89,13 @@
             <div class="field {% if form.gene_key.errors %} error{% endif %}">
                 {{ form.gene_key.label_tag }}
                 {% render_field form.gene_key placeholder='Define a gene key' %}
-                
+
                 {% for error in form.gene_key.errors %}
                 <span class='ui red small text' style="text-align: left">{{error}}</span>
                 {% endfor%}
 
-                <br>
-
                 {% if form.gene_key.help_text %}
+                <br>
                 <span class='ui grey small text' style="text-align: left"> {{ form.gene_key.help_text }} </span>
                 {% endif %}
 
@@ -116,11 +114,11 @@
                 <span class='ui red small text' style="text-align: left">{{error}}</span>
                 {% endfor%}
 
-                <br>
-
                 {% if form.genes.help_text %}
+                <br>
                 <span class='ui grey small text' style="text-align: left"> {{ form.genes.help_text }} </span>
                 {% endif %}
+
             </div>
 
             <div class="field {% if form.comment.errors %} error{% endif %}">
@@ -131,9 +129,8 @@
                 <span class='ui red small text' style="text-align: left">{{error}}</span>
                 {% endfor%}
 
-                <br>
-
                 {% if form.comment.help_text %}
+                <br>
                 <span class='ui grey small text' style="text-align: left"> {{ form.comment.help_text }} </span>
                 {% endif %}
 
