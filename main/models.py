@@ -38,6 +38,10 @@ class PanelGene(models.Model):
     transcript = models.ForeignKey(
         'Transcript', related_name='PrefferedTranscript', null=True, blank=True, on_delete=models.CASCADE)
 
+    def active_keys(self):
+        return ', '.join([key.gene_key for key in self.gene.gene_keys.filter(panel=self.panel).exclude(checked=False).exclude(archived=True)])
+    active_keys.short_description = "Active Keys"
+
 
 class GeneKey(models.Model):
     panel = models.ForeignKey(
