@@ -27,11 +27,11 @@
 
                     {% for error in form.username.errors %}
                     <span class='ui red small text' style="text-align: left">{{error}}</span>
+                    {% if not forloop.last %} <br> {% endif %}
                     {% endfor%}
 
-                    <br>
-
                     {% if form.username.help_text %}
+                    <br>
                     <span class='ui grey small text' style="text-align: left"> {{ form.username.help_text }} </span>
                     {% endif %}
 
@@ -45,11 +45,11 @@
 
                     {% for error in form.email.errors %}
                     <span class='ui red small text' style="text-align: left">{{error}}</span>
+                    {% if not forloop.last %} <br> {% endif %}
                     {% endfor%}
 
-                    <br>
-
                     {% if form.email.help_text %}
+                    <br>
                     <span class='ui grey small text' style="text-align: left"> {{ form.email.help_text }} </span>
                     {% endif %}
 
@@ -63,11 +63,11 @@
 
                     {% for error in form.password1.errors %}
                     <span class='ui red small text' style="text-align: left">{{error}}</span>
+                    {% if not forloop.last %} <br> {% endif %}
                     {% endfor%}
 
-                    <br>
-
                     {% if form.password1.help_text %}
+                    <br>
                     <span class='ui grey small text' style="text-align: left"> {{ form.password1.help_text }} </span>
                     {% endif %}
 
@@ -81,11 +81,11 @@
 
                     {% for error in form.password2.errors %}
                     <span class='ui red small text' style="text-align: left">{{error}}</span>
+                    {% if not forloop.last %} <br> {% endif %}
                     {% endfor%}
 
-                    <br>
-
                     {% if form.password2.help_text %}
+                    <br>
                     <span class='ui grey small text' style="text-align: left"> {{ form.password2.help_text }} </span>
                     {% endif %}
 
