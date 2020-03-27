@@ -47,7 +47,7 @@ def panel_keys(request, pk):
 @login_required
 def add_key(request, pk):
     panel = get_object_or_404(Panel, pk=pk)
-    user = request.user  # Fix this
+    user = request.user
 
     if request.method == 'POST':
         form = AddKeyForm(request.POST)

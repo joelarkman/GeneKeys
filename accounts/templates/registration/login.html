@@ -20,7 +20,9 @@
             <p class="ui error message">Your account doesn't have access to this page. To proceed,
                 please login with an account that has access.</p>
             {% else %}
+            {% if not r %}
             <p class="ui error message">Please login to see this page.</p>
+            {% endif %}
             {% endif %}
             {% endif %}
 
