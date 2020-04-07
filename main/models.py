@@ -11,12 +11,28 @@ class Panel(models.Model):
     genes = models.ManyToManyField(
         'Gene', through='PanelGene', related_name='Panels')
 
+    # These fields are not editable and are defined automatically/using special admin class.
+    # They would also not be visible within admin by default so are displayed as readonly using speacial admin class.
+    added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    added_by = models.ForeignKey(
+        User, related_name='panels', editable=False, null=True, on_delete=SET_NULL)
+    modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    modified_by = models.ForeignKey(
+        User, null=True, related_name='+', editable=False, on_delete=SET_NULL, blank=True)
+
     def __str__(self):
         return self.name
 
 
 class Gene(models.Model):
     name = models.CharField(max_length=10, unique=True)
+
+    added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    added_by = models.ForeignKey(
+        User, related_name='genes', editable=False, null=True, on_delete=SET_NULL)
+    modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    modified_by = models.ForeignKey(
+        User, null=True, editable=False, related_name='+', on_delete=SET_NULL, blank=True)
 
     def __str__(self):
         return self.name
@@ -25,6 +41,13 @@ class Gene(models.Model):
 class Transcript(models.Model):
     name = models.CharField(max_length=20, unique=True)
     Gene = models.ForeignKey(Gene, on_delete=models.CASCADE)
+
+    added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    added_by = models.ForeignKey(
+        User, related_name='transcripts', editable=False, null=True, on_delete=SET_NULL)
+    modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    modified_by = models.ForeignKey(
+        User, null=True, editable=False, related_name='+', on_delete=SET_NULL, blank=True)
 
     def __str__(self):
         return self.name
@@ -38,6 +61,13 @@ class PanelGene(models.Model):
     transcript = models.ForeignKey(
         'Transcript', related_name='PrefferedTranscript', null=True, blank=True, on_delete=models.CASCADE)
 
+    added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    added_by = models.ForeignKey(
+        User, related_name='panel_genes', editable=False, null=True, on_delete=SET_NULL)
+    modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    modified_by = models.ForeignKey(
+        User, null=True, editable=False, related_name='+', on_delete=SET_NULL, blank=True)
+
     def active_keys(self):
         return ', '.join([key.gene_key for key in self.gene.gene_keys.filter(panel=self.panel).exclude(checked=False).exclude(archived=True)])
     active_keys.short_description = "Active Keys"
@@ -50,7 +80,7 @@ class GeneKey(models.Model):
     genes = models.ManyToManyField('Gene', related_name='gene_keys')
     added_at = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(
-        User, related_name='gene_keys', null=True, on_delete=SET_NULL)
+        User, related_name='gene_keys', editable=False, null=True, on_delete=SET_NULL)
     checked = models.BooleanField(default=False)
     checked_at = models.DateTimeField(null=True, blank=True)
     checked_by = models.ForeignKey(
@@ -60,6 +90,9 @@ class GeneKey(models.Model):
     archived_by = models.ForeignKey(
         User, null=True, related_name='+', on_delete=SET_NULL, blank=True)
     comment = models.TextField(null=True, blank=True)
+    modified_at = models.DateTimeField(auto_now=True, blank=True)
+    modified_by = models.ForeignKey(
+        User, null=True, editable=False, related_name='+', on_delete=SET_NULL, blank=True)
 
     def gene_names(self):
         return ', '.join([gene.name for gene in self.genes.all()])

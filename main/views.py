@@ -54,8 +54,8 @@ def add_key(request, pk):
         form.panel = panel
         if form.is_valid():
             genekey = form.save(commit=False)
-            #genekey.panel = panel
             genekey.added_by = user
+            genekey.modified_by = user
             genekey.save()
             return redirect('pending_keys', pk=panel.pk)
     else:
@@ -85,6 +85,7 @@ def key_archive(request, pk, key):
         key.archived = True
         key.archived_by = user
         key.archived_at = datetime.now()
+        key.modified_by = user
         key.save()
         # This is just to play along with the existing code
         data['form_is_valid'] = True
@@ -119,7 +120,9 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene):
     data = dict()
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            panel_gene = form.save(commit=False)
+            panel_gene.modified_by = user
+            panel_gene.save()
             data['form_is_valid'] = True
             panel_genes = PanelGene.objects.filter(panel=pk)
             data['html_panel_gene_list'] = render_to_string('main/includes/partial_panel_gene_list.html', {
@@ -159,7 +162,9 @@ def save_key_comment_form(request, form, template_name, pk, key):
     data = dict()
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            comment = form.save(commit=False)
+            comment.modified_by = user
+            comment.save()
             data['form_is_valid'] = True
             active_gene_keys = GeneKey.objects.filter(
                 panel=panel.id).exclude(archived=True).exclude(checked=False).order_by('-added_at')
@@ -213,6 +218,7 @@ def key_accept(request, pk, key):
         key.checked = True
         key.checked_by = user
         key.checked_at = datetime.now()
+        key.modified_by = user
         key.save()
         # This is just to play along with the existing code
         data['form_is_valid'] = True

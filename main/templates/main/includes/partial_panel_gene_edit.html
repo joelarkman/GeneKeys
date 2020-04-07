@@ -8,6 +8,8 @@
             {% csrf_token %}
             {% include 'main/includes/partial_panel_gene_form.html' %}
         </form>
+        <span class='ui grey small text' style="text-align: left"> Last modified by {{ panel_gene.modified_by }}
+            ({{ panel_gene.modified_at }})</span>
     </div>
     <div class="actions">
         <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>

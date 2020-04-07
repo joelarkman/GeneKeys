@@ -6,6 +6,8 @@
             {% csrf_token %}
             {% include 'main/includes/partial_key_comment_form.html' %}
         </form>
+        <span class='ui grey small text' style="text-align: left"> Last modified by {{ key.modified_by }}
+            ({{ key.modified_at }})</span>
     </div>
     <div class="actions">
         <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
