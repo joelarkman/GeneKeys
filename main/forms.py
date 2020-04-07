@@ -12,7 +12,7 @@ class AddKeyForm(forms.ModelForm):
             'comment': forms.Textarea(attrs={'rows': 4, 'cols': 20}),
         }
 
-        fields = ['panel', 'gene_key', 'genes', 'comment']
+        fields = ['panel', 'key', 'genes', 'comment']
 
     panel = forms.ModelChoiceField(
         queryset=Panel.objects.all(), empty_label='Choose a panel')
@@ -23,7 +23,8 @@ class AddKeyForm(forms.ModelForm):
 
         if kwargs.get('instance'):
             initial = kwargs.setdefault('initial', {})
-            initial['genes'] = [gene.pk for gene in kwargs['instance'].genes.all()]
+            initial['genes'] = [
+                gene.pk for gene in kwargs['instance'].genes.all()]
 
         forms.ModelForm.__init__(self, *args, **kwargs)
         self.fields['genes'].queryset = Gene.objects.none()
@@ -35,8 +36,6 @@ class AddKeyForm(forms.ModelForm):
                     pk=panel_id).genes.all()
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty queryset
-        # elif self.instance.pk:
-        #     self.fields['genes'].queryset = self.instance.panel.gene_set
 
     # Overriding save allows us to process the value of 'genes' field
     def save(self, commit=True):

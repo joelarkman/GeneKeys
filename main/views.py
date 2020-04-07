@@ -290,7 +290,7 @@ def generate_excel(request, pk):
 
     for row in active_gene_keys:
         row_num += 1
-        ws.write(row_num, 0, row.gene_key, font_style)
+        ws.write(row_num, 0, row.key, font_style)
         ws.write(row_num, 1, row.gene_names(), font_style)
         ws.write(row_num, 2, row.panel.name, font_style)
         ws.write(row_num, 3, row.added_by.username, font_style)

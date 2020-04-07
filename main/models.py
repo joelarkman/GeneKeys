@@ -69,14 +69,14 @@ class PanelGene(models.Model):
         User, null=True, editable=False, related_name='+', on_delete=SET_NULL, blank=True)
 
     def active_keys(self):
-        return ', '.join([key.gene_key for key in self.gene.gene_keys.filter(panel=self.panel).exclude(checked=False).exclude(archived=True)])
+        return ', '.join([key.key for key in self.gene.gene_keys.filter(panel=self.panel).exclude(checked=False).exclude(archived=True)])
     active_keys.short_description = "Active Keys"
 
 
 class GeneKey(models.Model):
     panel = models.ForeignKey(
         'panel', related_name='GeneKey', on_delete=models.CASCADE)
-    gene_key = models.CharField(max_length=20, unique=True)
+    key = models.CharField(max_length=20, unique=True)
     genes = models.ManyToManyField('Gene', related_name='gene_keys')
     added_at = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(
@@ -99,4 +99,4 @@ class GeneKey(models.Model):
     gene_names.short_description = "Gene Names"
 
     def __str__(self):
-        return self.gene_key
+        return self.key

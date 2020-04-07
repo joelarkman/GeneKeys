@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Panel, Gene, Transcript, PanelGene, GeneKey
 
 # Register your models here.
+# Each model has been modified to allow read only fields to be viewed and saved within the admin view.
 
 
 class PanelAdmin(admin.ModelAdmin):
