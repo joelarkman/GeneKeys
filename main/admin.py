@@ -7,7 +7,7 @@ from .models import Panel, Gene, Transcript, PanelGene, GeneKey
 
 class PanelAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
-    actions = None
+    search_fields = ['name']
 
     def save_model(self, request, obj, form, change):
         if not obj.added_by:
@@ -21,6 +21,8 @@ admin.site.register(Panel, PanelAdmin)
 
 class GeneAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
+    ordering = ['-added_at']
+    search_fields = ['name']
 
     def save_model(self, request, obj, form, change):
         if not obj.added_by:
@@ -31,9 +33,11 @@ class GeneAdmin(admin.ModelAdmin):
 
 admin.site.register(Gene, GeneAdmin)
 
-
 class TranscriptAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
+    search_fields = ['name']
+    ordering = ['-added_at']
+    autocomplete_fields = ['Gene']
 
     def save_model(self, request, obj, form, change):
         if not obj.added_by:
@@ -41,12 +45,11 @@ class TranscriptAdmin(admin.ModelAdmin):
         obj.modified_by = request.user
         obj.save()
 
-
 admin.site.register(Transcript, TranscriptAdmin)
-
 
 class PanelGeneAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
+    autocomplete_fields = ['panel', 'gene', 'transcript']
 
     def save_model(self, request, obj, form, change):
         if not obj.added_by:

@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.deletion import SET_DEFAULT, SET_NULL
+from django.db.models.deletion import SET_NULL
 from django.db.models.fields import DateTimeField
 from django.db.models.fields.related import ForeignKey
 from django.contrib.auth.models import User
@@ -55,11 +55,11 @@ class Transcript(models.Model):
 
 class PanelGene(models.Model):
     panel = models.ForeignKey(
-        'panel', related_name='PanelGene', on_delete=models.SET_NULL, null=True)
+        'panel', related_name='PanelGene', on_delete=models.CASCADE, null=True)
     gene = models.ForeignKey('Gene', related_name='PanelGene',
-                             on_delete=models.SET_NULL, null=True)
+                             on_delete=models.CASCADE, null=True)
     transcript = models.ForeignKey(
-        'Transcript', related_name='PrefferedTranscript', null=True, blank=True, on_delete=models.CASCADE)
+        'Transcript', related_name='PrefferedTranscript', null=True, blank=True, on_delete=models.SET_NULL)
 
     added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     added_by = models.ForeignKey(
@@ -71,6 +71,9 @@ class PanelGene(models.Model):
     def active_keys(self):
         return ', '.join([key.key for key in self.gene.gene_keys.filter(panel=self.panel).exclude(checked=False).exclude(archived=True)])
     active_keys.short_description = "Active Keys"
+
+    def __str__(self):
+        return f'Panel: {self.panel}; Gene:  {self.gene}'
 
 
 class GeneKey(models.Model):
