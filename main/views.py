@@ -146,11 +146,11 @@ def panel_gene_edit(request, pk, panel_gene):
     item = get_object_or_404(PanelGene, id=panel_gene)
     if request.method == 'POST':
         form = PanelGeneForm(request.POST, instance=item)
-        form.fields['transcript'].queryset = Transcript.objects.filter(
+        form.fields['preferred_transcript'].queryset = Transcript.objects.filter(
             Gene=item.gene.id)
     else:
         form = PanelGeneForm(instance=item)
-        form.fields['transcript'].queryset = Transcript.objects.filter(
+        form.fields['preferred_transcript'].queryset = Transcript.objects.filter(
             Gene=item.gene.id)
     return save_panel_gene_form(request, form, 'main/includes/partial_panel_gene_edit.html', pk, panel_gene)
 

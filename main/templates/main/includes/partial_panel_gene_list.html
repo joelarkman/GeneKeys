@@ -1,7 +1,7 @@
 {% for panel_gene in panel_genes %}
 <tr>
     <td data-label="Genes">{{ panel_gene.gene }}</td>
-    <td data-label="Preferred Transcript">{{ panel_gene.transcript }}</td>
+    <td data-label="Preferred Transcript">{{ panel_gene.preferred_transcript }}</td>
     <td data-label="Relevant active keys">{{ panel_gene.active_keys }}</td>
     <td data-label="Edit" class="ui center aligned">
         <button type='button'

@@ -19,9 +19,9 @@
     </div> -->
 
     <div class="field {% if field.errors %} error{% endif %}">
-        {{ form.transcript.label_tag }}
-        {% render_field form.transcript class='ui fluid search selection dropdown' id='search-select' %}
-        {% for error in form.trancript.errors %}
+        {{ form.preferred_transcript.label_tag }}
+        {% render_field form.preferred_transcript class='ui fluid search selection dropdown' id='search-select' %}
+        {% for error in form.preferred_transcript.errors %}
         <p class="ui error message">{{ error }}</p>
         {% endfor %}
     </div>
