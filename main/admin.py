@@ -42,6 +42,7 @@ class PanelAdmin(admin.ModelAdmin):
         formset.save_m2m()
 
 
+# Automatically overwrite 'preferred transcript' to the currentlly selected default transcript.
 """         for f in formset.forms:
             obj = f.instance
             if Transcript.objects.filter(Gene=obj.gene, use_by_default=True).count() > 0:  
@@ -57,8 +58,6 @@ admin.site.register(Panel, PanelAdmin)
 class TranscriptInline(admin.TabularInline):
     model = Transcript
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
-    search_fields = ['name']
-    ordering = ['-added_at']
     autocomplete_fields = ['Gene']
     extra = 1
 
@@ -111,6 +110,20 @@ class TranscriptAdmin(admin.ModelAdmin):
 
 admin.site.register(Transcript, TranscriptAdmin)
 
+
+class GeneKeyAdmin(admin.ModelAdmin):
+    readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
+    search_fields = ['key']
+
+    def save_model(self, request, obj, form, change):
+        if not obj.added_by:
+            obj.added_by = request.user
+        obj.modified_by = request.user
+        obj.save()
+
+
+admin.site.register(GeneKey, GeneKeyAdmin)
+
 """ class PanelGeneAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
     autocomplete_fields = ['panel', 'gene', 'transcript']
@@ -122,16 +135,3 @@ admin.site.register(Transcript, TranscriptAdmin)
         obj.modified_by = request.user
         obj.save()
 admin.site.register(PanelGene, PanelGeneAdmin) """
-
-
-class GeneKeyAdmin(admin.ModelAdmin):
-    readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
-
-    def save_model(self, request, obj, form, change):
-        if not obj.added_by:
-            obj.added_by = request.user
-        obj.modified_by = request.user
-        obj.save()
-
-
-admin.site.register(GeneKey, GeneKeyAdmin)

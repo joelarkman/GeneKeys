@@ -59,7 +59,7 @@ class PanelGeneForm(forms.ModelForm):
     class Meta:
         model = PanelGene
         fields = ('preferred_transcript',)
-        # fields = ('panel', 'gene', 'transcript')
+        #fields = ('panel', 'gene', 'preferred_transcript')
 
 
 class KeyCommentForm(forms.ModelForm):
