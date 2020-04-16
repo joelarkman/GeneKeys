@@ -73,7 +73,7 @@ def add_key(request, pk):
 def load_genes(request):
     panel_id = request.GET.get('panel')
     genes = Panel.objects.get(pk=panel_id).genes.all()
-    return render(request, 'main/genes_dropdown_list_options.html', {'genes': genes})
+    return render(request, 'main/includes/partial_genes_dropdown_list_options.html', {'genes': genes})
 
 
 def key_archive(request, pk, key):
