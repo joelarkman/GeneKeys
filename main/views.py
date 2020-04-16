@@ -256,7 +256,7 @@ def generate_output(request, pk):
 def generate_excel(request, pk):
     panel = get_object_or_404(Panel, pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{panel}_Gene_Index.xls"'
+    response['Content-Disposition'] = f'attachment; filename="{panel}_Gene_Index_{datetime.now().strftime("%Y-%m-%d__%H-%M-%S")}.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('diagnostic_request_dictionary')
@@ -304,7 +304,7 @@ def generate_excel(request, pk):
     row_num = 0
     for row in panel_genes:
         row_num += 1
-        ws2.write(row_num, 0, row.transcript.name, font_style)
+        ws2.write(row_num, 0, row.preferred_transcript.name, font_style)
         ws2.write(row_num, 1, row.gene.name, font_style)
 
     # Save excel document
