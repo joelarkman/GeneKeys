@@ -3,7 +3,6 @@ from django.db.models.deletion import SET_NULL
 from django.db.models.fields import DateTimeField
 from django.db.models.fields.related import ForeignKey
 from django.contrib.auth.models import User
-from django.db import transaction
 
 
 class Panel(models.Model):
@@ -52,17 +51,6 @@ class Transcript(models.Model):
     modified_by = models.ForeignKey(
         User, null=True, editable=False, related_name='+', on_delete=SET_NULL, blank=True)
 
-    def save(self, *args, **kwargs):
-        if not self.use_by_default:
-            if Transcript.objects.filter(Gene=self.Gene, use_by_default=True).count() == 0:
-                self.use_by_default = True
-            else:
-                return super(Transcript, self).save(*args, **kwargs)
-        with transaction.atomic():
-            Transcript.objects.filter(Gene=self.Gene).filter(
-                use_by_default=True).update(use_by_default=False)
-            return super(Transcript, self).save(*args, **kwargs)
-
     def __str__(self):
         return self.name
 
@@ -71,7 +59,7 @@ class PanelGene(models.Model):
     panel = models.ForeignKey(
         'panel', related_name='PanelGene', on_delete=models.CASCADE, null=True)
     gene = models.ForeignKey('Gene', related_name='PanelGene',
-                             on_delete=models.CASCADE, null=True)
+                             on_delete=models.CASCADE, null=True, blank=True)
     preferred_transcript = models.ForeignKey(
         'Transcript', related_name='PrefferedTranscript', null=True, blank=True, on_delete=models.SET_NULL)
 
