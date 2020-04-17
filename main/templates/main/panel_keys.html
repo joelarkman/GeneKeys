@@ -4,7 +4,6 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.semanticui.min.css">
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.semanticui.min.js"></script>
-
 {% endblock stylesheet %}
 
 {% block javascript %}
@@ -58,7 +57,7 @@
                     }).modal('show');
                 },
                 success: function (data) {
-                    $("#modal-keys .modal-stuff").html(data.html_form);
+                    $("#modal-keys .modal-content").html(data.html_form);
                 }
             });
         };
@@ -78,7 +77,7 @@
                         $("#modal-keys").modal("hide");
                     }
                     else {
-                        $("#modal-keys .modal-stuff").html(data.html_form);
+                        $("#modal-keys .modal-content").html(data.html_form);
                     }
                 }
             });
@@ -98,6 +97,7 @@
 {% endblock javascript%}
 
 {% block content %}
+
 <div class="ui main container">
 
     <!-- Constant Buttons -->
@@ -136,7 +136,8 @@
             <div class="header">
                 Please log in!
             </div>
-            <p>Authentication required to add, accept or archive keys; modify comments; designate preferred transcripts; or generate output files.</p>
+            <p>Authentication required to add, accept or archive keys; modify comments; designate preferred transcripts;
+                or generate output files.</p>
         </div>
         {% endif %}
 
@@ -234,8 +235,9 @@
     </div>
 </div>
 
+<!-- Create an empty modal (modal-content filled using AJAX) -->
 <div id='modal-keys' class="ui small modal">
-    <div class="modal-stuff">
+    <div class="modal-content">
     </div>
 </div>
 

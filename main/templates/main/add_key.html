@@ -3,9 +3,6 @@
 
 {% block javascript %}
 <script>
-    $('.ui.dropdown')
-        .dropdown();
-
     $(document).ready(function () {
         var url = $("#genekeyForm").attr("data-genes-url");  // get the url of the `load_genes` view
         var panelId = $("#id_panel").val();  // get the selected gene ID from the HTML input
@@ -38,11 +35,10 @@
 
     });
 </script>
-
-
 {% endblock javascript %}
 
 {% block content %}
+
 <div class="ui main container">
 
     <div class="ui segment">

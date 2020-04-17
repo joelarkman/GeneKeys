@@ -141,12 +141,12 @@ admin.site.register(GeneKey, GeneKeyAdmin)
         obj.save()
 
 
-admin.site.register(Transcript, TranscriptAdmin) """
+admin.site.register(Transcript, TranscriptAdmin)
 
 
-""" class PanelGeneAdmin(admin.ModelAdmin):
+class PanelGeneAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
-    autocomplete_fields = ['panel', 'gene', 'transcript']
+    autocomplete_fields = ['panel', 'gene', 'preferred_transcript']
     search_fields = ['panel__name','gene__name']
 
     def save_model(self, request, obj, form, change):

@@ -8,9 +8,10 @@
 
 {% block javascript %}
 <script>
-
     $.extend(true, $.fn.dataTable.defaults, {
-        "ordering": false
+        "ordering": false,
+        "pageLength": 15,
+        "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]]
     });
 
     $(document).ready(function () {
@@ -33,7 +34,7 @@
                     }).modal('show');
                 },
                 success: function (data) {
-                    $("#modal-keys .modal-stuff").html(data.html_form);
+                    $("#modal-keys .modal-content").html(data.html_form);
                 }
             });
         };
@@ -51,7 +52,7 @@
                         $("#modal-keys").modal("hide");
                     }
                     else {
-                        $("#modal-keys .modal-stuff").html(data.html_form);
+                        $("#modal-keys .modal-content").html(data.html_form);
                     }
                 }
             });
@@ -67,6 +68,7 @@
 {% endblock javascript%}
 
 {% block content %}
+
 <div class="ui main container">
 
     <div class="ui segment">
@@ -129,8 +131,9 @@
 
 </div>
 
+<!-- Create an empty modal (modal-content filled using AJAX) -->
 <div id='modal-keys' class="ui small modal">
-    <div class="modal-stuff">
+    <div class="modal-content">
     </div>
 </div>
 

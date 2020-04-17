@@ -5,12 +5,14 @@
 <!-- Page topper -->
 <div class="ui inverted attached padded topper segment" style='background-color: #005EB8;'>
     <div class="ui middle aligned center aligned grid">
+
         <div class="row">
             <h1 class="ui inverted header">
                 <i class="large key icon"></i>
                 WMRGL Gene Keys
             </h1>
         </div>
+
         <div class="row">
             <div class="ui floating message">
                 <div class="header">
@@ -19,33 +21,32 @@
                 <p>Please select a sequencing chemistry to view the related keys.</p>
             </div>
         </div>
+
     </div>
 </div>
 
 <!-- Panel cards -->
 <div class="ui main container">
     <div class="ui stretched three column grid">
+
         {% for panel in panels %}
         <div class="column">
             <a class="ui fluid link card" href="{% url 'panel_keys' panel.pk %}">
+
                 <div class="content">
                     <div class="center aligned header">
                         <h1>{{panel.name}}</h1>
                     </div>
                 </div>
 
-                <!-- {% if panel.description %}
-                <div class="content">
-                    <div class="center aligned description">{{panel.description}}</div>
-                </div>
-                {% endif %} -->
-
                 <div class="center aligned extra content">
                     Click to view keys
                 </div>
+                
             </a>
         </div>
         {% endfor %}
+
     </div>
 </div>
 
