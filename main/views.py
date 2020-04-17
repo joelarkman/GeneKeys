@@ -31,7 +31,7 @@ def panel_keys(request, pk):
         panel=pk).exclude(archived=True).exclude(checked=False).order_by('-added_at')
     archived_gene_keys = GeneKey.objects.filter(
         panel=pk).exclude(archived=False).exclude(checked=False).order_by('-added_at')
-    panel_genes = PanelGene.objects.filter(panel=pk)
+    panel_genes = PanelGene.objects.filter(panel=pk).order_by('gene__name')
 
     context = {
         'title': panel.name,
@@ -124,7 +124,7 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene):
             panel_gene.modified_by = user
             panel_gene.save()
             data['form_is_valid'] = True
-            panel_genes = PanelGene.objects.filter(panel=pk)
+            panel_genes = PanelGene.objects.filter(panel=pk).order_by('gene__name')
             data['html_panel_gene_list'] = render_to_string('main/includes/partial_panel_gene_list.html', {
                 'panel': panel,
                 'panel_gene': panel_gene,
@@ -259,8 +259,16 @@ def generate_excel(request, pk):
     response['Content-Disposition'] = f'attachment; filename="{panel}_Gene_Index_{datetime.now().strftime("%Y-%m-%d__%H-%M-%S")}.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
+
     ws = wb.add_sheet('diagnostic_request_dictionary')
+    ws.protect = True
+    ws.set_panes_frozen(True)
+    ws.set_horz_split_pos(1) 
+
     ws2 = wb.add_sheet('selected_transcript')
+    ws2.protect = True
+    ws2.set_panes_frozen(True)
+    ws2.set_horz_split_pos(1) 
 
     # Sheet header, first row
     row_num = 0
@@ -272,11 +280,16 @@ def generate_excel(request, pk):
     columns = ['Key', 'Gene list', 'Panel',
                'Added by', 'Date', 'Checked by', 'Date', ]
 
+    ws.col(1).width = int(80*260)           
+
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
 
     # Second Sheet
     columns2 = ['Transcript', 'Gene', ]
+
+    ws2.col(0).width = int(15*260)
+    ws2.col(1).width = int(15*260) 
 
     for col_num in range(len(columns2)):
         ws2.write(row_num, col_num, columns2[col_num], font_style)
@@ -299,7 +312,7 @@ def generate_excel(request, pk):
         ws.write(row_num, 6, row.checked_at.strftime('%d/%m/%Y'), font_style)
 
     # Second Sheet
-    panel_genes = PanelGene.objects.filter(panel=panel)
+    panel_genes = PanelGene.objects.filter(panel=panel).order_by('gene__name')
 
     row_num = 0
     for row in panel_genes:
