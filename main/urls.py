@@ -26,4 +26,6 @@ urlpatterns = [
          views.panel_gene_edit, name='panel_gene_edit'),
     path('panels/<int:pk>/pendingkeys/<int:key>/accept',
          views.key_accept, name='key_accept'),
+    path('panels/<int:pk>/pendingkeys/<int:key>/delete',
+         views.key_delete, name='key_delete'),
 ]

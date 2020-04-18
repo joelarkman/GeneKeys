@@ -7,9 +7,20 @@
     <td data-label="Date">{{ key.added_at|date:'d/m/Y' }}</td>
     <td data-label="Comment">{{ key.comment }}</td>
     <td data-label="Accept" , class='right aligned'>
-        <button type="button"
-            class="ui positive button js-accept-key {% if user.is_authenticated and key.added_by == user %}disabled{%endif%}"
-            data-url="{% url 'key_accept' pk=panel.id key=key.id %}">Accept</button>
+
+        <div class="ui icon buttons">
+            <button type="button" data-tooltip="Delete {{key.key}}" data-variation='small'
+                class="ui negative negative button js-delete-key {% if not user.is_authenticated %} disabled {%endif%}"
+                data-url="{% url 'key_delete' pk=panel.id key=key.id %}">
+                <i class="trash icon"></i>
+            </button>
+            <button type="button" data-tooltip="Accept {{key.key}}" data-variation='small'
+                class="ui positive button js-accept-key {% if user.is_authenticated and key.added_by == user %}disabled{%endif%}"
+                data-url="{% url 'key_accept' pk=panel.id key=key.id %}">
+                <i class="check icon"></i>
+            </button>
+        </div>
+
     </td>
 </tr>
 {% endfor %}

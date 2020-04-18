@@ -27,17 +27,21 @@
     });
 
     $(document).ready(function () {
-        $('#active-keys-table').DataTable();
+        $('#active-keys-table').DataTable({
+            "language": { "emptyTable": "No active keys for the {{panel}} panel" }
+        });
     });
 
     $(document).ready(function () {
         $('#archived-keys-table').DataTable({
+            "language": { "emptyTable": "No archived keys for the {{panel}} panel" },
             "autoWidth": false
         });
     });
 
     $(document).ready(function () {
         $('#panel-genes-table').DataTable({
+            "language": { "emptyTable": "No genes associated with the {{panel}} panel" },
             "autoWidth": false,
         });
     });
@@ -71,9 +75,26 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.form_is_valid) {
+                        $('#active-keys-table').DataTable().destroy();
                         $("#active-keys-table tbody").html(data.html_key_list_active);
+                        $('#active-keys-table').DataTable({
+                            "language": { "emptyTable": "No active keys for the {{panel}} panel" }
+                        }).draw();
+
+                        $('#archived-keys-table').DataTable().destroy();
                         $("#archived-keys-table tbody").html(data.html_key_list_archived);
+                        $('#archived-keys-table').DataTable({
+                            "language": { "emptyTable": "No archived keys for the {{panel}} panel" },
+                            "autoWidth": false
+                        }).draw();
+
+                        $('#panel-genes-table').DataTable().destroy();
                         $("#panel-genes-table tbody").html(data.html_panel_gene_list);
+                        $('#panel-genes-table').DataTable({
+                            "language": { "emptyTable": "No genes associated with the {{panel}} panel" },
+                            "autoWidth": false,
+                        }).draw();
+
                         $("#modal-keys").modal("hide");
                     }
                     else {
@@ -100,7 +121,7 @@
 
 <div class="ui main container">
 
-    <!-- Constant Buttons -->
+    <!-- Three top menu buttons -->
     <div class="ui segment">
         <div class="ui three item menu">
             <a href="{% url 'add_key' panel.pk %}" class="item">Add key</a>
@@ -130,6 +151,7 @@
         <h1>{{ panel.name }} Panel</h1>
         <p>{{ panel.description }}</p>
 
+        <!-- Warning message is user not logged in -->
         {% if not user.is_authenticated %}
         <div class="ui warning message">
             <i class="close icon"></i>
@@ -153,12 +175,12 @@
             <table id="active-keys-table" class="ui striped celled table" style="width:100%">
                 <colgroup>
                     <col style="width: auto;">
-                    <col style="width: 270px;">
+                    <col style="width: 400px;">
                     <col style="width: auto;">
                     <col style="width: auto;">
                     <col style="width: auto;">
                     <col style="width: auto;">
-                    <col style="width: 157.5px">
+                    <col style="width: 100px;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -182,7 +204,7 @@
             <table id="archived-keys-table" class="ui striped celled table" style="width:100%">
                 <colgroup>
                     <col style="width: auto;">
-                    <col style="width: 270px;">
+                    <col style="width: 400px;">
                     <col style="width: auto;">
                     <col style="width: auto;">
                     <col style="width: auto;">
@@ -216,7 +238,7 @@
                     <col style="width: auto;">
                     <col style="width: auto;">
                     <col style="width: auto;">
-                    <col style="width: 115px">
+                    <col style="width: 100px;">
                 </colgroup>
                 <thead>
                     <tr>

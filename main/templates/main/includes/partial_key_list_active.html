@@ -7,13 +7,19 @@
     <td data-label="Checked by">{{ key.checked_by }}</td>
     <td data-label="Date">{{ key.checked_at|date:'d/m/Y' }}</td>
     <td data-label="" class="">
-        <div class="ui small vertical buttons">
-            <button type="button" class="ui button js-key-comment"
-                data-url="{% url 'key_comment' pk=panel.id key=key.id %}">Comment</button>
-            <button type="button"
+
+        <div class="ui icon buttons">
+            <button type="button" data-tooltip="Archive {{key.key}}" data-variation='small'
                 class="ui negative button js-archive-key {% if not user.is_authenticated %} disabled {%endif%}"
-                data-url="{% url 'key_archive' pk=panel.id key=key.id %}">Archive</button>
+                data-url="{% url 'key_archive' pk=panel.id key=key.id %}">
+                <i class="folder minus icon"></i>
+            </button>
+            <button type="button" data-tooltip="View Comment" data-variation='small' class="ui button js-key-comment"
+                data-url="{% url 'key_comment' pk=panel.id key=key.id %}">
+                <i class="comment icon"></i>
+            </button>
         </div>
+
     </td>
 </tr>
 {% endfor %}

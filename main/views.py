@@ -124,7 +124,8 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene):
             panel_gene.modified_by = user
             panel_gene.save()
             data['form_is_valid'] = True
-            panel_genes = PanelGene.objects.filter(panel=pk).order_by('gene__name')
+            panel_genes = PanelGene.objects.filter(
+                panel=pk).order_by('gene__name')
             data['html_panel_gene_list'] = render_to_string('main/includes/partial_panel_gene_list.html', {
                 'panel': panel,
                 'panel_gene': panel_gene,
@@ -239,6 +240,32 @@ def key_accept(request, pk, key):
     return JsonResponse(data)
 
 
+def key_delete(request, pk, key):
+    user = request.user
+    panel = get_object_or_404(Panel, pk=pk)
+    key = get_object_or_404(GeneKey, pk=key)
+    data = dict()
+    if request.method == 'POST':
+        key.delete()
+        # This is just to play along with the existing code
+        data['form_is_valid'] = True
+        pending_gene_keys = GeneKey.objects.all().exclude(
+            checked=True).order_by('-added_at')
+        data['html_key_list_pending'] = render_to_string('main/includes/partial_key_list_pending.html', {
+            'panel': panel,
+            'pending_gene_keys': pending_gene_keys,
+            'user': user
+        })
+    else:
+        context = {
+            'panel': panel,
+            'key': key,
+            'user': user}
+        data['html_form'] = render_to_string(
+            'main/includes/partial_key_delete.html', context, request=request)
+    return JsonResponse(data)
+
+
 @login_required
 def generate_output(request, pk):
     panel = get_object_or_404(Panel, pk=pk)
@@ -263,12 +290,12 @@ def generate_excel(request, pk):
     ws = wb.add_sheet('diagnostic_request_dictionary')
     ws.protect = True
     ws.set_panes_frozen(True)
-    ws.set_horz_split_pos(1) 
+    ws.set_horz_split_pos(1)
 
     ws2 = wb.add_sheet('selected_transcript')
     ws2.protect = True
     ws2.set_panes_frozen(True)
-    ws2.set_horz_split_pos(1) 
+    ws2.set_horz_split_pos(1)
 
     # Sheet header, first row
     row_num = 0
@@ -280,7 +307,7 @@ def generate_excel(request, pk):
     columns = ['Key', 'Gene list', 'Panel',
                'Added by', 'Date', 'Checked by', 'Date', ]
 
-    ws.col(1).width = int(80*260)           
+    ws.col(1).width = int(80*260)
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -289,7 +316,7 @@ def generate_excel(request, pk):
     columns2 = ['Transcript', 'Gene', ]
 
     ws2.col(0).width = int(15*260)
-    ws2.col(1).width = int(15*260) 
+    ws2.col(1).width = int(15*260)
 
     for col_num in range(len(columns2)):
         ws2.write(row_num, col_num, columns2[col_num], font_style)
