@@ -1,5 +1,6 @@
 import xlwt
 from datetime import datetime
+from rest_framework import generics
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
@@ -9,6 +10,8 @@ from django.template.loader import render_to_string
 
 from .forms import AddKeyForm, KeyCommentForm, PanelGeneForm
 from .models import Gene, GeneKey, Panel, PanelGene, Transcript
+from .serializers import PanelSerializer, GeneKeySerializer, PanelGeneSerializer
+
 
 ######################
 ##### Main Views #####
@@ -70,10 +73,49 @@ def add_key(request, pk):
     return render(request, 'main/add_key.html', context)
 
 
+@login_required
+def pending_keys(request, pk):
+    panel = get_object_or_404(Panel, pk=pk)
+    pending_gene_keys = GeneKey.objects.all().exclude(
+        checked=True).order_by('-added_at')
+
+    context = {
+        'title': 'Pending Keys',
+        'panel': panel,
+        'pending_gene_keys': pending_gene_keys
+    }
+
+    return render(request, 'main/pending_keys.html', context)
+
+
+@login_required
+def generate_output(request, pk):
+    panel = get_object_or_404(Panel, pk=pk)
+    panels = Panel.objects.all()
+
+    context = {
+        'title': 'Generate output files',
+        'panel': panel,
+        'panels': panels
+    }
+
+    return render(request, 'main/generate_output.html', context)
+
+
+######################
+##### AJAX Views #####
+######################
+
+
 def load_genes(request):
     panel_id = request.GET.get('panel')
     genes = Panel.objects.get(pk=panel_id).genes.all()
     return render(request, 'main/includes/partial_genes_dropdown_list_options.html', {'genes': genes})
+
+
+######################
+##### CRUD Views #####
+######################
 
 
 def key_archive(request, pk, key):
@@ -195,21 +237,6 @@ def key_comment(request, pk, key):
     return save_key_comment_form(request, form, 'main/includes/partial_key_comment.html', pk, key)
 
 
-@login_required
-def pending_keys(request, pk):
-    panel = get_object_or_404(Panel, pk=pk)
-    pending_gene_keys = GeneKey.objects.all().exclude(
-        checked=True).order_by('-added_at')
-
-    context = {
-        'title': 'Pending Keys',
-        'panel': panel,
-        'pending_gene_keys': pending_gene_keys
-    }
-
-    return render(request, 'main/pending_keys.html', context)
-
-
 def key_accept(request, pk, key):
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
@@ -266,18 +293,9 @@ def key_delete(request, pk, key):
     return JsonResponse(data)
 
 
-@login_required
-def generate_output(request, pk):
-    panel = get_object_or_404(Panel, pk=pk)
-    panels = Panel.objects.all()
-
-    context = {
-        'title': 'Generate output files',
-        'panel': panel,
-        'panels': panels
-    }
-
-    return render(request, 'main/generate_output.html', context)
+#############################
+##### Output Generation #####
+#############################
 
 
 def generate_excel(request, pk):
@@ -350,3 +368,67 @@ def generate_excel(request, pk):
     # Save excel document
     wb.save(response)
     return response
+
+
+###############
+##### API #####
+###############
+
+
+class PanelAPIView(generics.ListAPIView):
+    serializer_class = PanelSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = Panel.objects.none()
+        panel = self.request.query_params.get('panel', None)
+        if panel is not None:
+            try:
+                panel = float(panel)
+                queryset = Panel.objects.filter(id=panel)
+            except ValueError:
+                queryset = Panel.objects.filter(name__contains=panel.upper())
+        return queryset
+
+
+class GeneKeyAPIView(generics.ListAPIView):
+    serializer_class = GeneKeySerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = GeneKey.objects.none()
+        panel = self.kwargs['panel']
+        try:
+            panel = float(panel)
+            queryset = GeneKey.objects.filter(panel=panel).exclude(
+                archived=True).exclude(checked=False).order_by('-added_at')
+        except ValueError:
+            queryset = GeneKey.objects.filter(panel__name=panel.upper()).exclude(
+                archived=True).exclude(checked=False).order_by('-added_at')
+        return queryset
+
+
+class PanelGeneAPIView(generics.ListAPIView):
+    serializer_class = PanelGeneSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = PanelGene.objects.none()
+        panel = self.kwargs['panel']
+        try:
+            panel = float(panel)
+            queryset = PanelGene.objects.filter(
+                panel=panel).order_by('gene__name')
+        except ValueError:
+            queryset = PanelGene.objects.filter(
+                panel__name=panel.upper()).order_by('gene__name')
+        return queryset

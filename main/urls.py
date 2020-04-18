@@ -2,7 +2,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Core views
+    ######################
+    ##### Main Views #####
+    ######################
+
+
     path('', views.home, name='main-home'),
     path('panels/<int:pk>/', views.panel_keys, name='panel_keys'),
     path('panels/<int:pk>/addkey/', views.add_key, name='add_key'),
@@ -11,13 +15,20 @@ urlpatterns = [
     path('panels/<int:pk>/pending_keys/',
          views.pending_keys, name='pending_keys'),
 
-    # Response path to generate excel files for export.
-    path('export/<int:pk>', views.generate_excel, name='generate_excel'),
 
-    # AJAX path to load panel specific genes in Add Key form.
+    ######################
+    ##### AJAX Views #####
+    ######################
+
+
     path('ajax/load-genes/', views.load_genes, name='ajax_load_genes'),
 
-    # AJAX paths to facilitate CRUD modals.
+
+    ######################
+    ##### CRUD Views #####
+    ######################
+
+
     path('panels/<int:pk>/<int:key>/archive/',
          views.key_archive, name='key_archive'),
     path('panels/<int:pk>/<int:key>/comment/',
@@ -28,4 +39,25 @@ urlpatterns = [
          views.key_accept, name='key_accept'),
     path('panels/<int:pk>/pendingkeys/<int:key>/delete',
          views.key_delete, name='key_delete'),
+
+
+    #############################
+    ##### Output Generation #####
+    #############################
+
+
+    path('export/<int:pk>', views.generate_excel, name='generate_excel'),
+
+
+    ###############
+    ##### API #####
+    ###############
+
+
+    path('api/',
+         views.PanelAPIView.as_view()),
+    path('api/<panel>/active_keys',
+         views.GeneKeyAPIView.as_view()),
+    path('api/<panel>/genes',
+         views.PanelGeneAPIView.as_view()),
 ]
