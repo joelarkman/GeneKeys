@@ -35,7 +35,7 @@
                     }).modal('show');
                 },
                 success: function (data) {
-                    $("#modal-keys .modal-content").html(data.html_form);
+                    $("#modal-keys").html(data.html_form);
                 }
             });
         };
@@ -58,7 +58,7 @@
                         $("#modal-keys").modal("hide");
                     }
                     else {
-                        $("#modal-keys .modal-content").html(data.html_form);
+                        $("#modal-keys").html(data.html_form);
                     }
                 }
             });
@@ -109,15 +109,12 @@
         <h1>Pending Keys</h1>
 
         <!-- Warning message -->
-        <div class="ui warning message">
-            <div class="header">
-                Please Note!
-            </div>
-            <p>Keys cannot be accepted by the same user that added them.</p>
+        <div class="ui info message">
+            <p><b>Please Note:</b> Keys cannot be accepted by the same user that added them.</p>
         </div>
 
         <!-- Pending keys table -->
-        <table id="pending-keys-table" class="ui striped celled table" style="width:100%">
+        <table id="pending-keys-table" class="ui selectable striped celled table" style="width:100%">
             <colgroup>
                 <col style="width: auto;">
                 <col style="width: 270px;">
@@ -146,10 +143,8 @@
 
 </div>
 
-<!-- Create an empty modal (modal-content filled using AJAX) -->
+<!-- Create an empty modal (content filled using AJAX) -->
 <div id='modal-keys' class="ui small modal">
-    <div class="modal-content">
-    </div>
 </div>
 
 {% endblock content %}

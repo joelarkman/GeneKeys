@@ -8,12 +8,17 @@
 
 {% block javascript %}
 <script>
-    $('.message .close')
-        .on('click', function () {
-            $(this)
-                .closest('.message')
-                .transition('fade');
-        });
+    $("#dismiss-button").click(function () {
+        $("#bottom-message").slideUp(200);
+        $("#main-segment").css("margin-bottom", "13px");
+    });
+
+    // $('.message .close')
+    //     .on('click', function () {
+    //         $(this)
+    //             .closest('.message')
+    //             .transition('fade');
+    // });
 
     $('.tables.menu .item').tab({
         alwaysRefresh: true,
@@ -61,7 +66,7 @@
                     }).modal('show');
                 },
                 success: function (data) {
-                    $("#modal-keys .modal-content").html(data.html_form);
+                    $("#modal-keys").html(data.html_form);
                 }
             });
         };
@@ -98,7 +103,7 @@
                         $("#modal-keys").modal("hide");
                     }
                     else {
-                        $("#modal-keys .modal-content").html(data.html_form);
+                        $("#modal-keys").html(data.html_form);
                     }
                 }
             });
@@ -118,6 +123,27 @@
 {% endblock javascript%}
 
 {% block content %}
+
+{% if not user.is_authenticated %}
+<div class="ui fixed bottom sticky inverted attached segment" id='bottom-message'
+    style='background-color: #425563;opacity: 0.97;'>
+    <div class="ui container">
+        <div class="ui middle aligned divided grid" style="padding-left: 13px; padding-right: 13px;">
+            <div class='twelve wide column'>
+                <div class="ui inverted header" style="margin-bottom: 0px;">
+                    Please log in!
+                </div>
+                <p style="margin-top: 0px;">
+                    Authentication is required to add, accept or archive keys; modify comments; designate preferred
+                    transcripts;or generate output files.</p>
+            </div>
+            <div class="four wide column">
+                <button class="ui fluid button" id='dismiss-button'>Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <div class="ui main container">
 
@@ -145,14 +171,15 @@
     </div>
 
     <!-- Main section -->
-    <div class="ui bottom attached segment">
+    <div id='main-segment' class="ui bottom attached segment" {% if not user.is_authenticated %}
+        style="margin-bottom: 83px;" {% endif %}>
 
         <!-- Panel information -->
         <h1>{{ panel.name }} Panel</h1>
         <p>{{ panel.description }}</p>
 
         <!-- Warning message is user not logged in -->
-        {% if not user.is_authenticated %}
+        <!-- {% if not user.is_authenticated %}
         <div class="ui warning message">
             <i class="close icon"></i>
             <div class="header">
@@ -161,7 +188,7 @@
             <p>Authentication required to add, accept or archive keys; modify comments; designate preferred transcripts;
                 or generate output files.</p>
         </div>
-        {% endif %}
+        {% endif %} -->
 
         <!-- Tab menu -->
         <div class="ui pointing secondary menu tables">
@@ -172,7 +199,7 @@
 
         <!-- Active keys tab -->
         <div class="ui tab" data-tab="active-keys">
-            <table id="active-keys-table" class="ui striped celled table" style="width:100%">
+            <table id="active-keys-table" class="ui selectable striped celled table" style="width:100%">
                 <colgroup>
                     <col style="width: auto;">
                     <col style="width: 400px;">
@@ -201,7 +228,7 @@
 
         <!-- Archived keys tab -->
         <div class="ui tab" data-tab="archived-keys">
-            <table id="archived-keys-table" class="ui striped celled table" style="width:100%">
+            <table id="archived-keys-table" class="ui selectable striped celled table" style="width:100%">
                 <colgroup>
                     <col style="width: auto;">
                     <col style="width: 400px;">
@@ -233,7 +260,8 @@
 
         <!-- Gene/transcripts tab -->
         <div class="ui tab" data-tab="gene-transcripts">
-            <table id="panel-genes-table" class="ui striped celled table" style="table-layout: fixed; width:100%">
+            <table id="panel-genes-table" class="ui selectable striped celled table"
+                style="table-layout: fixed; width:100%">
                 <colgroup>
                     <col style="width: auto;">
                     <col style="width: auto;">
@@ -257,10 +285,8 @@
     </div>
 </div>
 
-<!-- Create an empty modal (modal-content filled using AJAX) -->
+<!-- Create an empty modal (content filled using AJAX) -->
 <div id='modal-keys' class="ui small modal">
-    <div class="modal-content">
-    </div>
 </div>
 
 {% endblock content %}

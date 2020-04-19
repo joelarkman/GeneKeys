@@ -1,20 +1,17 @@
 {% load humanize %}
-
-<div class="active ui small modal">
-    <div class="header">Comment for {{key}}</div>
-    <div class="content">
-        <form id='theform3' method="post" action="{% url 'key_comment' pk=panel.id key=key.id %}"
-            class="js-key-comment-form ">
-            {% csrf_token %}
-            {% include 'main/includes/partial_key_comment_form.html' %}
-        </form>
-        <span class='ui grey small text' style="text-align: left"> Last modified by {{ key.modified_by }}
-            ({{ key.modified_at|naturaltime }})</span>
-    </div>
-    <div class="actions">
-        <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
-        {% if user.is_authenticated %}
-        <input type="submit" value="Save" form="theform3" class="ui primary button">
-        {%endif%}
-    </div>
+<div class="header">Comment for {{key}}</div>
+<div class="content">
+    <form id='theform3' method="post" action="{% url 'key_comment' pk=panel.id key=key.id %}"
+        class="js-key-comment-form ">
+        {% csrf_token %}
+        {% include 'main/includes/partial_key_comment_form.html' %}
+    </form>
+    <span class='ui grey small text' style="text-align: left"> Last modified by {{ key.modified_by }}
+        ({{ key.modified_at|naturaltime }})</span>
+</div>
+<div class="actions">
+    <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
+    {% if user.is_authenticated %}
+    <input type="submit" value="Save changes" form="theform3" class="ui primary button">
+    {%endif%}
 </div>

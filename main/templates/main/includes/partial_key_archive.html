@@ -1,14 +1,12 @@
-<div class="active ui small modal">
-    <div class="header">Archive Gene Key</div>
-    <div class="content">
-        <form id='theform' method="post" action="{% url 'key_archive' pk=panel.id key=key.id %}"
-            class="js-key-archive-form">
-            {% csrf_token %}
-            <p> Are you sure you want to archive <strong>'{{ key }}'</strong> ?</p>
-        </form>
-    </div>
-    <div class="actions">
-        <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
-        <input type="submit" value="Archive Gene Key" form="theform" class="ui negative button">
-    </div>
+<div class="header">Archive Gene Key</div>
+<div class="content">
+    <form id='theform' method="post" action="{% url 'key_archive' pk=panel.id key=key.id %}"
+        class="js-key-archive-form">
+        {% csrf_token %}
+        <p> Are you sure you want to archive <strong>'{{ key }}'</strong> ?</p>
+    </form>
+</div>
+<div class="actions">
+    <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
+    <input type="submit" value="Archive Gene Key" form="theform" class="ui negative button">
 </div>

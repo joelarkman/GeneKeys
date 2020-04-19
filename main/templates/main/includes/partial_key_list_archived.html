@@ -1,5 +1,5 @@
 {% for entry in archived_gene_keys %}
-<tr class="negative">
+<tr class="negative" id="key_archived_{{ key.id }}">
     <td data-label="Gene Key">{{ entry.key }}</td>
     <td data-label="Genes">{{ entry.gene_names }}</td>
     <td data-label="Added by">{{ entry.added_by }}</td>

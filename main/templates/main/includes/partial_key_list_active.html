@@ -1,12 +1,12 @@
 {% for key in active_gene_keys %}
-<tr id="key_archived_{{ key.id }}">
-    <td data-label="Gene Key">{{ key.key }}</td>
+<tr id="key_active_{{ key.id }}">
+    <td data-label="Key">{{ key.key }}</td>
     <td data-label="Genes">{{ key.gene_names }}</td>
     <td data-label="Added by">{{ key.added_by }}</td>
     <td data-label="Date">{{ key.added_at|date:'d/m/Y' }}</td>
     <td data-label="Checked by">{{ key.checked_by }}</td>
     <td data-label="Date">{{ key.checked_at|date:'d/m/Y' }}</td>
-    <td data-label="" class="">
+    <td data-label="" class="right aligned">
 
         <div class="ui icon buttons">
             <button type="button" data-tooltip="Archive {{key.key}}" data-variation='small'

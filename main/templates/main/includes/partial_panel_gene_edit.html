@@ -1,23 +1,21 @@
 {% load humanize %}
-
-<div class="active ui small modal">
-    <div class="header">Set preferred transcript</div>
-    <div class="content">
-        Select the preferred <b>{{panel_gene.gene}}</b> transcript to use for the <b>{{panel}}</b> panel.
-        <br><br>
-        <form id='theform2' method="post" action="{% url 'panel_gene_edit' pk=panel.id panel_gene=panel_gene.id %}"
-            class="js-edit-panel_gene-form">
-            {% csrf_token %}
-            {% include 'main/includes/partial_panel_gene_form.html' %}
-        </form>
-        <span class='ui grey small text' style="text-align: left"> Last modified by {{ panel_gene.modified_by }}
-            ({{ panel_gene.modified_at|naturaltime }})</span>
-    </div>
-    <div class="actions">
-        <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
-        <input type="submit" value="Set preferred transcript" form="theform2" class="ui primary button">
-    </div>
+<div class="header">Set preferred transcript</div>
+<div class="content">
+    Select the preferred <b>{{panel_gene.gene}}</b> transcript to use for the <b>{{panel}}</b> panel.
+    <br><br>
+    <form id='theform2' method="post" action="{% url 'panel_gene_edit' pk=panel.id panel_gene=panel_gene.id %}"
+        class="js-edit-panel_gene-form">
+        {% csrf_token %}
+        {% include 'main/includes/partial_panel_gene_form.html' %}
+    </form>
+    <span class='ui grey small text' style="text-align: left"> Last modified by {{ panel_gene.modified_by }}
+        ({{ panel_gene.modified_at|naturaltime }})</span>
 </div>
+<div class="actions">
+    <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
+    <input type="submit" value="Set preferred transcript" form="theform2" class="ui primary button">
+</div>
+
 
 <script>
     $('.ui.dropdown')
