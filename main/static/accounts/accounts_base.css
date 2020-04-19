@@ -1,15 +1,11 @@
 body {
     background-color: #ebeff5;
-  }
+}
 
-  body > .grid {
-    height: 100%;
-  }
+body > .grid {
+  height: 100%;
+}
 
-  .image {
-    margin-top: -100px;
-  }
-  
-  .column {
-    max-width: 480px;
-  }
+.column {
+  max-width: 480px;
+}

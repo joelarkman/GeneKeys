@@ -5,34 +5,34 @@
 <script>
     $(document).ready(function () {
         var url = $("#genekeyForm").attr("data-genes-url");  // get the url of the `load_genes` view
-        var panelId = $("#id_panel").val();  // get the selected gene ID from the HTML input
+        var panelId = $("#id_panel").val();  // get the selected panel ID from the HTML input
 
         $.ajax({                       // initialize an AJAX request
             url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-genes/)
             data: {
-                'panel': panelId       // add the gene id to the GET parameters
+                'panel': panelId       // add the panel id to the GET parameters
             },
             success: function (data) {   // `data` is the return of the `load_genes` view function
-                $("#id_genes").html(data);  // replace the contents of the gene input with the data that came from the server
+                $("#id_genes").html(data);  // replace the contents of the genes input with the data that came from the server
             }
         });
 
     });
 
+    // Re-run the function everytime the selected panel is changed.
     $("#id_panel").change(function () {
-        var url = $("#genekeyForm").attr("data-genes-url");  // get the url of the `load_genes` view
-        var panelId = $(this).val();  // get the selected gene ID from the HTML input
+        var url = $("#genekeyForm").attr("data-genes-url");
+        var panelId = $(this).val();
 
-        $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-genes/)
+        $.ajax({
+            url: url,
             data: {
-                'panel': panelId       // add the gene id to the GET parameters
+                'panel': panelId
             },
-            success: function (data) {   // `data` is the return of the `load_genes` view function
-                $("#id_genes").html(data);  // replace the contents of the gene input with the data that came from the server
+            success: function (data) {
+                $("#id_genes").html(data);
             }
         });
-
     });
 </script>
 {% endblock javascript %}
@@ -41,6 +41,7 @@
 
 <div class="ui main container">
 
+    <!-- Three top menu buttons -->
     <div class="ui segment">
         <div class="ui three item menu">
             <div class="active item">Add key</div>
@@ -49,6 +50,7 @@
         </div>
     </div>
 
+    <!-- Breadcrumb -->
     <div class="ui mini two top attached steps">
         <a class="step" href="{% url 'main-home' %}">
             <div class="content">
@@ -62,11 +64,17 @@
         </a>
     </div>
 
-    <div class="attached ui segment">
+    <!-- Main section -->
+    <div class="ui bottom attached segment">
+
+        <!-- Title -->
         <h1>Add key</h1>
+
+        <!-- Add key form -->
         <form class="ui form" method='post' id="genekeyForm" data-genes-url="{% url 'ajax_load_genes' %}" novalidate>
             {% csrf_token %}
 
+            <!-- Select Panel Field -->
             <div class="field {% if form.panel.errors %} error{% endif %}">
                 {{ form.panel.label_tag }}
                 {% render_field form.panel class='ui selection dropdown'%}
@@ -80,9 +88,9 @@
                 <br>
                 <span class='ui grey small text' style="text-align: left"> {{ form.panel.help_text }} </span>
                 {% endif %}
-
             </div>
 
+            <!-- Name Key Field -->
             <div class="field {% if form.key.errors %} error{% endif %}">
                 {{ form.key.label_tag }}
                 {% render_field form.key placeholder='Define a key name' %}
@@ -99,6 +107,7 @@
 
             </div>
 
+            <!-- Select Genes Field -->
             <div class="field {% if form.genes.errors %} error{% endif %}">
                 {{ form.genes.label_tag }}
                 <select name="genes" class="ui fluid search three column dropdown" required id="id_genes" multiple>
@@ -120,6 +129,7 @@
 
             </div>
 
+            <!-- Add Comment Field -->
             <div class="field {% if form.comment.errors %} error{% endif %}">
                 {{ form.comment.label_tag }}
                 {% render_field form.comment placeholder='Add a comment (Optional)'%}
@@ -136,9 +146,7 @@
 
             </div>
 
-            <!-- Temporarily removed cancel button -->
-            <!-- <a class="ui button" href="javascript:window.history.back()">Cancel </a> -->
-
+            <!-- Submit Button -->
             <button type="submit" class='ui primary button'>Add key</button>
 
         </form>

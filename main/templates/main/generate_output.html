@@ -4,6 +4,7 @@
 
 <div class="ui main container">
 
+    <!-- Three top menu buttons -->
     <div class="ui segment">
         <div class="ui three item menu">
             <a href="{% url 'add_key' panel.pk %}" class="item">Add key</a>
@@ -12,6 +13,7 @@
         </div>
     </div>
 
+    <!-- Breadcrumb -->
     <div class="ui mini two top attached steps">
         <a class="step" href="{% url 'main-home' %}">
             <div class="content">
@@ -25,31 +27,31 @@
         </a>
     </div>
 
-    <div class="attached ui segment">
+    <!-- Main section -->
+    <div class="ui bottom attached segment">
 
+        <!-- Title -->
         <h1>Generate output files</h1>
 
+        <!-- Message -->
         <div class="ui message">
             <p>Please select a panel to download an updated Gene Index file.</p>
         </div>
 
+        <!-- Download Cards -->
         <div class="ui stretched four column grid">
 
             {% for panel in panels %}
             <div class="column">
-
                 <a class="ui fluid card" href="{% url 'generate_excel' panel.pk %}">
-                    
                     <div class="content">
                         <div class="center aligned header">
                             <h2>{{panel.name}}</h2>
                         </div>
                     </div>
-    
                     <div class="center aligned extra content">
                         Click to download
                     </div>
-    
                 </a>
             </div>
             {% endfor %}
