@@ -77,4 +77,10 @@
         .dropdown();
 </script>
 
+{% if user.is_authenticated %}
+<script>
+    $(".spacer").css("height", "47px");
+</script>
+{% endif %}
+
 </html>
