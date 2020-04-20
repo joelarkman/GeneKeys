@@ -77,10 +77,11 @@
         .dropdown();
 </script>
 
-{% if user.is_authenticated %}
+<!-- Set spacer div height equal to that of menu -->
 <script>
-    $(".spacer").css("height", "47px");
+    var height = $(".main.menu").height()
+    var unit = 'px'
+    $(".spacer").css("height", height + unit)
 </script>
-{% endif %}
 
 </html>

@@ -15,11 +15,12 @@ admin.site.index_title = 'App administration'
 class PanelGeneInline(admin.TabularInline):
     model = PanelGene
     verbose_name_plural = 'Existing Genes on Panel'
-    readonly_fields = ('gene','preferred_transcript', 'added_by', 'added_at',
+    readonly_fields = ('gene', 'preferred_transcript', 'added_by', 'added_at',
                        'modified_by', 'modified_at')
     extra = 1
     max_num = 0
     show_change_link = True
+
 
 class AddPanelGeneInline(admin.TabularInline):
     model = PanelGene
@@ -31,13 +32,13 @@ class AddPanelGeneInline(admin.TabularInline):
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
-        return  queryset.none() 
+        return queryset.none()
 
 
 class PanelAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
     search_fields = ['name']
-    inlines = [PanelGeneInline,AddPanelGeneInline]
+    inlines = [PanelGeneInline, AddPanelGeneInline]
 
     def save_model(self, request, obj, form, change):
         if not obj.added_by:
@@ -69,12 +70,6 @@ class TranscriptInline(admin.TabularInline):
     autocomplete_fields = ['Gene']
     extra = 1
 
-    def save_model(self, request, obj, form, change):
-        if not obj.added_by:
-            obj.added_by = request.user
-        obj.modified_by = request.user
-        obj.save()
-
 
 class GeneAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
@@ -98,16 +93,15 @@ class GeneAdmin(admin.ModelAdmin):
             instance.modified_by = request.user
 
             # This code ensures only one transcript can be set as default (for each gene).
-            # It also sets a newly added transcript to default if there is no current default.
-            if not instance.use_by_default:
+            # If one transcript is added, it is set to default if there is no current default.
+            if not instance.use_by_default and len(instances) == 1:
                 if Transcript.objects.filter(Gene=instance.Gene, use_by_default=True).count() == 0:
                     instance.use_by_default = True
-                return instance.save()
             with transaction.atomic():
                 Transcript.objects.filter(Gene=instance.Gene).filter(
                     use_by_default=True).update(use_by_default=False)
-                return instance.save()
 
+            instance.save()
         formset.save_m2m()
 
 
