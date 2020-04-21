@@ -8,18 +8,6 @@
 
 {% block javascript %}
 <script>
-    $("#dismiss-button").click(function () {
-        $("#bottom-message").slideUp(200);
-        $("#main-segment").css("margin-bottom", "13px");
-    });
-
-    // $('.message .close')
-    //     .on('click', function () {
-    //         $(this)
-    //             .closest('.message')
-    //             .transition('fade');
-    // });
-
     $('.tables.menu .item').tab({
         alwaysRefresh: true,
         cache: false,
@@ -120,13 +108,36 @@
         $("#modal-keys").on("submit", ".js-key-comment-form", saveForm);
     });
 </script>
+
+<!-- js to handle warning message for logged out users -->
+{% if not user.is_authenticated %}
+<script>
+    function setMessageMargin() {
+        if ($('#bottom-message').is(':visible')) {
+            var message_height = $("#bottom-message").height()
+            $("#main-segment").css("margin-bottom", message_height + 43 + "px");
+        }
+    }
+    $(document).ready(function () {
+        setMessageMargin()
+    })
+    $(window).resize(function () {
+        setMessageMargin();
+    });
+    $("#dismiss-button").click(function () {
+        $("#bottom-message").slideUp(200);
+        $("#main-segment").css("margin-bottom", "13px");
+    });
+</script>
+{% endif %}
 {% endblock javascript%}
 
 {% block content %}
 
+<!-- Warning message if user not logged in -->
 {% if not user.is_authenticated %}
 <div class="ui fixed bottom sticky inverted attached segment" id='bottom-message'
-    style='background-color: #425563;opacity: 0.97;'>
+    style='background-color: #425563; opacity: 0.97;'>
     <div class="ui container">
         <div class="ui middle aligned divided grid" style="padding-left: 13px; padding-right: 13px;">
             <div class='twelve wide column'>
@@ -171,24 +182,11 @@
     </div>
 
     <!-- Main section -->
-    <div id='main-segment' class="ui bottom attached segment" {% if not user.is_authenticated %}
-        style="margin-bottom: 83px;" {% endif %}>
+    <div id='main-segment' class="ui bottom attached segment">
 
         <!-- Panel information -->
         <h1>{{ panel.name }} Panel</h1>
         <p>{{ panel.description }}</p>
-
-        <!-- Warning message is user not logged in -->
-        <!-- {% if not user.is_authenticated %}
-        <div class="ui warning message">
-            <i class="close icon"></i>
-            <div class="header">
-                Please log in!
-            </div>
-            <p>Authentication required to add, accept or archive keys; modify comments; designate preferred transcripts;
-                or generate output files.</p>
-        </div>
-        {% endif %} -->
 
         <!-- Tab menu -->
         <div class="ui pointing secondary menu tables">
