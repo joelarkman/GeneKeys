@@ -11,11 +11,6 @@
     <span class='ui grey small text' style="text-align: left"> Last modified by {{ panel_gene.modified_by }}
         ({{ panel_gene.modified_at|naturaltime }})</span>
 </div>
-<div class="actions">
-    <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
-    <input type="submit" value="Set preferred transcript" form="theform2" class="ui primary button">
-</div>
-
 
 <script>
     $('.ui.dropdown')
@@ -23,3 +18,10 @@
 
     $('#search-select').dropdown({});
 </script>
+
+<div class="actions">
+    <button type="button" class="ui cancel button" data-dismiss="modal">Cancel</button>
+    <input type="submit" value="Set preferred transcript" form="theform2" class="ui primary button">
+</div>
+
+

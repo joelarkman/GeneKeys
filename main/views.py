@@ -54,7 +54,6 @@ def add_key(request, pk):
 
     if request.method == 'POST':
         form = AddKeyForm(request.POST)
-        form.panel = panel
         if form.is_valid():
             genekey = form.save(commit=False)
             genekey.added_by = user
@@ -307,11 +306,13 @@ def generate_excel(request, pk):
 
     ws = wb.add_sheet('diagnostic_request_dictionary')
     ws.protect = True
+    ws.password = 'hEdraf-qunzer-gidbo1'
     ws.set_panes_frozen(True)
     ws.set_horz_split_pos(1)
 
     ws2 = wb.add_sheet('selected_transcript')
     ws2.protect = True
+    ws2.password = 'hEdraf-qunzer-gidbo1'
     ws2.set_panes_frozen(True)
     ws2.set_horz_split_pos(1)
 
