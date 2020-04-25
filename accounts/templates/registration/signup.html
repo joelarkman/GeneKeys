@@ -15,19 +15,20 @@
             <a href="{% url 'main-home' %}">
                 <span class="link-spanner"></span>
             </a>
-            
+
         </div>
 
         <div class="ui attached segment">
 
-            <form class="ui form" method='post' novalidate>
+            <form class="ui large form" method='post' novalidate>
                 {% csrf_token %}
 
 
                 <div class="field {% if form.username.errors %} error{% endif %}">
-                    <div class="ui left icon input">
+                    <div class="ui left icon input floating-label">
                         <i class="user icon"></i>
                         {% render_field form.username placeholder='Username' %}
+                        <label>Username</label>
                     </div>
 
                     {% for error in form.username.errors %}
@@ -43,9 +44,10 @@
                 </div>
 
                 <div class="field {% if form.email.errors %} error{% endif %}">
-                    <div class="ui left icon input">
+                    <div class="ui left icon input floating-label">
                         <i class="envelope icon"></i>
                         {% render_field form.email placeholder='Email address' %}
+                        <label>Email address</label>
                     </div>
 
                     {% for error in form.email.errors %}
@@ -61,9 +63,10 @@
                 </div>
 
                 <div class="field {% if form.password1.errors %} error{% endif %}">
-                    <div class="ui left icon input">
+                    <div class="ui left icon input floating-label">
                         <i class="lock icon"></i>
                         {% render_field form.password1 placeholder='Password' %}
+                        <label>Password</label>
                     </div>
 
                     {% for error in form.password1.errors %}
@@ -79,9 +82,10 @@
                 </div>
 
                 <div class="field {% if form.password2.errors %} error{% endif %}">
-                    <div class="ui left icon input">
+                    <div class="ui left icon input floating-label">
                         <i class="lock icon"></i>
                         {% render_field form.password2 placeholder='Password confirmation' %}
+                        <label>Password confirmation</label>
                     </div>
 
                     {% for error in form.password2.errors %}

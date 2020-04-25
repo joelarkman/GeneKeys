@@ -11,7 +11,7 @@
                 <i class="large key icon"></i>
                 WMRGL Gene Keys
             </h1>
-            
+
             <a href="{% url 'main-home' %}">
                 <span class="link-spanner"></span>
             </a>
@@ -39,15 +39,18 @@
                 {% csrf_token %}
 
                 <div class="field {% if form.errors %} error{% endif %}">
-                    <div class="ui left icon input">
+                    <div class="ui left icon input floating-label">
                         <i class="user icon"></i>
                         {% render_field form.username placeholder='Username' %}
+                        <label>Username</label>
                     </div>
                 </div>
+
                 <div class="field {% if form.errors %} error{% endif %}">
-                    <div class="ui left icon input">
+                    <div class="ui left icon input floating-label">
                         <i class="lock icon"></i>
                         {% render_field form.password placeholder='Password' %}
+                        <label>Password</label>
                     </div>
                 </div>
 
