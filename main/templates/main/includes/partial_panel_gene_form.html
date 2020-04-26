@@ -2,22 +2,6 @@
 
 <div class="ui form">
 
-    <!-- <div class="disabled field {% if field.errors %} error{% endif %}">
-        {{ form.panel.label_tag }}
-        {% render_field form.panel class='ui selection dropdown'%}
-        {% for error in field.errors %}
-        <p class="ui error message">{{ error }}</p>
-        {% endfor %}
-    </div>
-
-    <div class="disabled field {% if field.errors %} error{% endif %}">
-        {{ form.gene.label_tag }}
-        {% render_field form.gene class='ui selection dropdown'%}
-        {% for error in field.errors %}
-        <p class="ui error message">{{ error }}</p>
-        {% endfor %}
-    </div> -->
-
     <div class="field {% if field.errors %} error{% endif %}">
         {{ form.preferred_transcript.label_tag }}
         {% render_field form.preferred_transcript class='ui fluid search selection dropdown' id='search-select' %}
