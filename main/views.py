@@ -108,7 +108,7 @@ def generate_output(request, pk):
 
 def load_genes(request):
     panel_id = request.GET.get('panel')
-    genes = Panel.objects.get(pk=panel_id).genes.all()
+    genes = Panel.objects.get(pk=panel_id).genes.all().order_by('name')
     return render(request, 'main/includes/partial_genes_dropdown_list_options.html', {'genes': genes})
 
 
