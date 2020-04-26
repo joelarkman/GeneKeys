@@ -11,6 +11,11 @@
     $('.tables.menu .item').tab({
         alwaysRefresh: true,
         cache: false,
+        onVisible: function () {
+            $.fn.dataTable
+            .tables({ visible: true, api: true })
+            .columns.adjust();
+        },
     });
 
     $.extend(true, $.fn.dataTable.defaults, {
@@ -23,19 +28,11 @@
         $('#active-keys-table').DataTable({
             "language": { "emptyTable": "No active keys for the {{panel}} panel" }
         });
-    });
-
-    $(document).ready(function () {
         $('#archived-keys-table').DataTable({
-            "language": { "emptyTable": "No archived keys for the {{panel}} panel" },
-            "autoWidth": false
+            "language": { "emptyTable": "No archived keys for the {{panel}} panel" }
         });
-    });
-
-    $(document).ready(function () {
         $('#panel-genes-table').DataTable({
-            "language": { "emptyTable": "No genes associated with the {{panel}} panel" },
-            "autoWidth": false,
+            "language": { "emptyTable": "No genes associated with the {{panel}} panel" }
         });
     });
 
@@ -77,15 +74,13 @@
                         $('#archived-keys-table').DataTable().destroy();
                         $("#archived-keys-table tbody").html(data.html_key_list_archived);
                         $('#archived-keys-table').DataTable({
-                            "language": { "emptyTable": "No archived keys for the {{panel}} panel" },
-                            "autoWidth": false
+                            "language": { "emptyTable": "No archived keys for the {{panel}} panel" }
                         }).draw();
 
                         $('#panel-genes-table').DataTable().destroy();
                         $("#panel-genes-table tbody").html(data.html_panel_gene_list);
                         $('#panel-genes-table').DataTable({
-                            "language": { "emptyTable": "No genes associated with the {{panel}} panel" },
-                            "autoWidth": false,
+                            "language": { "emptyTable": "No genes associated with the {{panel}} panel" }
                         }).draw();
 
                         $("#modal-keys").modal("hide");
@@ -199,7 +194,7 @@
         <div class="ui tab" data-tab="active-keys">
             <table id="active-keys-table" class="ui selectable striped celled table" style="width:100%">
                 <colgroup>
-                    <col style="width: auto;">
+                    <col style="width: 110px;">
                     <col style="width: 400px;">
                     <col style="width: auto;">
                     <col style="width: auto;">
@@ -228,7 +223,7 @@
         <div class="ui tab" data-tab="archived-keys">
             <table id="archived-keys-table" class="ui selectable striped celled table" style="width:100%">
                 <colgroup>
-                    <col style="width: auto;">
+                    <col style="width: 110px;">
                     <col style="width: 400px;">
                     <col style="width: auto;">
                     <col style="width: auto;">
