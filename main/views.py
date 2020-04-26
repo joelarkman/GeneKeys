@@ -363,7 +363,9 @@ def generate_excel(request, pk):
     row_num = 0
     for row in panel_genes:
         row_num += 1
-        ws2.write(row_num, 0, row.preferred_transcript.name, font_style)
+
+        if row.preferred_transcript:
+            ws2.write(row_num, 0, row.preferred_transcript.name, font_style)
         ws2.write(row_num, 1, row.gene.name, font_style)
 
     # Save excel document
