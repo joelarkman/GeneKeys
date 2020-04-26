@@ -3,37 +3,27 @@
 
 {% block javascript %}
 <script>
-    $(document).ready(function () {
+    function getgenes() {
         var url = $("#genekeyForm").attr("data-genes-url");  // get the url of the `load_genes` view
         var panelId = $("#id_panel").val();  // get the selected panel ID from the HTML input
 
         $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-genes/)
+            url: url,                    // set the url of the request (localhost:8000/ajax/load-genes/)
             data: {
                 'panel': panelId       // add the panel id to the GET parameters
             },
             success: function (data) {   // `data` is the return of the `load_genes` view function
+                $("#id_genes").dropdown('clear') // clear any existing selections
                 $("#id_genes").html(data);  // replace the contents of the genes input with the data that came from the server
             }
         });
-
+    };
+    $(document).ready(function () { // get genes on page load
+        getgenes()
     });
-
-    // Re-run the function everytime the selected panel is changed.
-    $("#id_panel").change(function () {
-        var url = $("#genekeyForm").attr("data-genes-url");
-        var panelId = $(this).val();
-
-        $.ajax({
-            url: url,
-            data: {
-                'panel': panelId
-            },
-            success: function (data) {
-                $("#id_genes").html(data);
-            }
-        });
-    });
+    $("#id_panel").change(function () { // get genes when selected panel is changed
+        getgenes()
+    })
 </script>
 {% endblock javascript %}
 
