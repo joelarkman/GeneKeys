@@ -13,8 +13,8 @@
         cache: false,
         onVisible: function () {
             $.fn.dataTable
-            .tables({ visible: true, api: true })
-            .columns.adjust();
+                .tables({ visible: true, api: true })
+                .columns.adjust();
         },
     });
 
@@ -26,13 +26,16 @@
 
     $(document).ready(function () {
         $('#active-keys-table').DataTable({
-            "language": { "emptyTable": "No active keys for the {{panel}} panel" }
+            "language": { "emptyTable": "No active keys for the {{panel}} panel" },
+            "autoWidth": false
         });
         $('#archived-keys-table').DataTable({
-            "language": { "emptyTable": "No archived keys for the {{panel}} panel" }
+            "language": { "emptyTable": "No archived keys for the {{panel}} panel" },
+            "autoWidth": false
         });
         $('#panel-genes-table').DataTable({
-            "language": { "emptyTable": "No genes associated with the {{panel}} panel" }
+            "language": { "emptyTable": "No genes associated with the {{panel}} panel" },
+            "autoWidth": false
         });
     });
 
@@ -68,19 +71,22 @@
                         $('#active-keys-table').DataTable().destroy();
                         $("#active-keys-table tbody").html(data.html_key_list_active);
                         $('#active-keys-table').DataTable({
-                            "language": { "emptyTable": "No active keys for the {{panel}} panel" }
+                            "language": { "emptyTable": "No active keys for the {{panel}} panel" },
+                            "autoWidth": false
                         }).draw();
 
                         $('#archived-keys-table').DataTable().destroy();
                         $("#archived-keys-table tbody").html(data.html_key_list_archived);
                         $('#archived-keys-table').DataTable({
-                            "language": { "emptyTable": "No archived keys for the {{panel}} panel" }
+                            "language": { "emptyTable": "No archived keys for the {{panel}} panel" },
+                            "autoWidth": false
                         }).draw();
 
                         $('#panel-genes-table').DataTable().destroy();
                         $("#panel-genes-table tbody").html(data.html_panel_gene_list);
                         $('#panel-genes-table').DataTable({
-                            "language": { "emptyTable": "No genes associated with the {{panel}} panel" }
+                            "language": { "emptyTable": "No genes associated with the {{panel}} panel" },
+                            "autoWidth": false
                         }).draw();
 
                         $("#modal-keys").modal("hide");
