@@ -111,6 +111,7 @@ admin.site.register(Gene, GeneAdmin)
 class GeneKeyAdmin(admin.ModelAdmin):
     readonly_fields = ('added_by', 'added_at', 'modified_by', 'modified_at')
     search_fields = ['key']
+    list_filter = ('panel__name',)
 
     def save_model(self, request, obj, form, change):
         if not obj.added_by:
