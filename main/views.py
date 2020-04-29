@@ -123,11 +123,12 @@ def key_archive(request, pk, key):
     key = get_object_or_404(GeneKey, pk=key)
     data = dict()
     if request.method == 'POST':
-        key.archived = True
-        key.archived_by = user
-        key.archived_at = datetime.now()
-        key.modified_by = user
-        key.save()
+        if not key.archived:
+            key.archived = True
+            key.archived_by = user
+            key.archived_at = datetime.now()
+            key.modified_by = user
+            key.save()
         # This is just to play along with the existing code
         data['form_is_valid'] = True
         active_gene_keys = GeneKey.objects.filter(
@@ -154,7 +155,7 @@ def key_archive(request, pk, key):
     return JsonResponse(data)
 
 
-def save_panel_gene_form(request, form, template_name, pk, panel_gene):
+def save_panel_gene_form(request, form, template_name, pk, panel_gene, q_set):
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     panel_gene = get_object_or_404(PanelGene, id=panel_gene)
@@ -178,7 +179,8 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene):
     context = {'user': user,
                'panel': panel,
                'panel_gene': panel_gene,
-               'form': form}
+               'form': form,
+               'q_set': q_set}
     data['html_form'] = render_to_string(
         template_name, context, request=request)
     return JsonResponse(data)
@@ -186,15 +188,16 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene):
 
 def panel_gene_edit(request, pk, panel_gene):
     item = get_object_or_404(PanelGene, id=panel_gene)
+    q_set = Transcript.objects.filter(
+        Gene=item.gene.id)
     if request.method == 'POST':
         form = PanelGeneForm(request.POST, instance=item)
-        form.fields['preferred_transcript'].queryset = Transcript.objects.filter(
-            Gene=item.gene.id)
+        form.fields['preferred_transcript'].queryset = q_set
     else:
         form = PanelGeneForm(instance=item)
         form.fields['preferred_transcript'].queryset = Transcript.objects.filter(
             Gene=item.gene.id)
-    return save_panel_gene_form(request, form, 'main/includes/partial_panel_gene_edit.html', pk, panel_gene)
+    return save_panel_gene_form(request, form, 'main/includes/partial_panel_gene_edit.html', pk, panel_gene, q_set)
 
 
 def save_key_comment_form(request, form, template_name, pk, key):
@@ -204,9 +207,10 @@ def save_key_comment_form(request, form, template_name, pk, key):
     data = dict()
     if request.method == 'POST':
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.modified_by = user
-            comment.save()
+            if not key.archived:
+                comment = form.save(commit=False)
+                comment.modified_by = user
+                comment.save()
             data['form_is_valid'] = True
             active_gene_keys = GeneKey.objects.filter(
                 panel=panel.id).exclude(archived=True).exclude(checked=False).order_by('-added_at')
@@ -272,7 +276,8 @@ def key_delete(request, pk, key):
     key = get_object_or_404(GeneKey, pk=key)
     data = dict()
     if request.method == 'POST':
-        key.delete()
+        if not key.checked:
+            key.delete()
         # This is just to play along with the existing code
         data['form_is_valid'] = True
         pending_gene_keys = GeneKey.objects.all().exclude(
