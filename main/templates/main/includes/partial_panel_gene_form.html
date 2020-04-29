@@ -2,12 +2,46 @@
 
 <div class="ui form">
 
-    <div class="field {% if field.errors %} error{% endif %}">
+    <!-- <div class="field {% if field.errors %} error{% endif %}">
         {{ form.preferred_transcript.label_tag }}
-        {% render_field form.preferred_transcript class='ui fluid search selection dropdown' id='search-select' %}
+        {% render_field form.preferred_transcript class='ui fluid search selection dropdown' %}
         {% for error in form.preferred_transcript.errors %}
         <p class="ui error message">{{ error }}</p>
         {% endfor %}
+    </div> -->
+
+    <div class="field {% if field.errors %} error{% endif %}">
+        {{ form.preferred_transcript.label_tag }}
+        <div class="ui fluid selection dropdown">
+            <input type="hidden" name="preferred_transcript" value="{{panel_gene.preferred_transcript.id}}">
+            <i class="dropdown icon"></i>
+            <span class="default text">None</span>
+            <div class="menu">
+
+                <!-- <div class='item' data-value="">
+                    <span class="text">None</span>
+                </div> -->
+
+                {% for transcript in q_set %}
+                <div class='item' data-value="{{ transcript.pk }}">
+                    <span class="text">{{ transcript.name }}</span>
+                    {% if transcript.use_by_default %}
+                    <span class="description">(Default)</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% for error in form.panel.errors %}
+        <span class='ui red small text' style="text-align: left">{{error}}</span>
+        {% if not forloop.last %} <br> {% endif %}
+        {% endfor%}
+
+        {% if form.panel.help_text %}
+        <br>
+        <span class='ui grey small text' style="text-align: left"> {{ form.panel.help_text }} </span>
+        {% endif %}
     </div>
 
 </div>
