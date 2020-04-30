@@ -118,17 +118,24 @@ def load_genes(request):
 
 
 def key_archive(request, pk, key):
+    data = dict()
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     key = get_object_or_404(GeneKey, pk=key)
-    data = dict()
+    if key.archived:
+        data['form_is_valid'] = False
+        context = {
+            'panel': panel}
+        data['html_form'] = render_to_string(
+            'main/includes/partial_key_is_archived.html', context)
+        return JsonResponse(data)
+    
     if request.method == 'POST':
-        if not key.archived:
-            key.archived = True
-            key.archived_by = user
-            key.archived_at = datetime.now()
-            key.modified_by = user
-            key.save()
+        key.archived = True
+        key.archived_by = user
+        key.archived_at = datetime.now()
+        key.modified_by = user
+        key.save()
         # This is just to play along with the existing code
         data['form_is_valid'] = True
         active_gene_keys = GeneKey.objects.filter(
