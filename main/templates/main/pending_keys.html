@@ -59,6 +59,9 @@
                     }
                     else {
                         $("#modal-keys").html(data.html_form);
+                        if ($('#modal-keys').hasClass('active')) {
+                            $("#modal-keys").modal('setting', 'transition', none).modal("hide");
+                        };
                         $('#modal-keys').modal({
                             centered: false,
                             autofocus: false
