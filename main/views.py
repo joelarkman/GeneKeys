@@ -270,6 +270,7 @@ def key_accept(request, pk, key):
     panel = get_object_or_404(Panel, pk=pk)
     try:
         key = get_object_or_404(GeneKey, pk=key)
+        exception = False
     except:
         exception = True
         context = {
