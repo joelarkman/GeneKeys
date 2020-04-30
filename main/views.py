@@ -216,34 +216,35 @@ def panel_gene_edit(request, pk, panel_gene):
 
 
 def save_key_comment_form(request, form, template_name, pk, key, stored_time):
+    data = dict()
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     key = get_object_or_404(GeneKey, pk=key)
-    data = dict()
+
+    # Check if key is now archived.
+    if key.archived:
+        context = {
+            'panel': panel}
+        data['html_form'] = render_to_string(
+            'main/includes/partial_key_is_archived.html', context)
+        return JsonResponse(data)  # Return warning modal.
+
     if request.method == 'POST':
         if form.is_valid():
             # Check if stored last modified time is different to the database value.
             if stored_time != key.modified_at.strftime("%Y-%m-%d__%H-%M-%S.%f"):
-                # If it has been modified check if it has been archived.
-                if key.archived:
-                    context = {
-                        'panel': panel}
-                    data['html_form'] = render_to_string(
-                        'main/includes/partial_key_is_archived.html', context)
-                    return JsonResponse(data)  # Return warning modal.
-                else:
-                    # If its been modified but not archived.
-                    data['form_is_valid'] = False
-                    context = {'panel': panel,
-                               'key': key,
-                               'form': KeyCommentForm(instance=key),
-                               'user': user,
-                               'change': True}
-                    data['html_form'] = render_to_string(template_name,
-                                                         context,
-                                                         request=request)
-                    # Refresh comment modal with 'change' error.
-                    return JsonResponse(data)
+                # If its been modified but not archived.
+                data['form_is_valid'] = False
+                context = {'panel': panel,
+                            'key': key,
+                            'form': KeyCommentForm(instance=key),
+                            'user': user,
+                            'change': True}
+                data['html_form'] = render_to_string(template_name,
+                                                        context,
+                                                        request=request)
+                # Refresh comment modal with 'change' error.
+                return JsonResponse(data)
             else:
                 comment = form.save(commit=False)
                 comment.modified_by = user
@@ -286,9 +287,7 @@ def key_accept(request, pk, key):
     panel = get_object_or_404(Panel, pk=pk)
     try:
         key = get_object_or_404(GeneKey, pk=key)
-        exception = False
     except:
-        exception = True
         context = {
             'panel': panel}
         data['html_form'] = render_to_string(
@@ -296,28 +295,20 @@ def key_accept(request, pk, key):
         return JsonResponse(data)
 
     if request.method == 'POST':
-        if exception:
-            data['form_is_valid'] = False
-            context = {
-                'panel': panel}
-            data['html_form'] = render_to_string(
-                'main/includes/partial_key_doesnt_exist.html', context)
-            return JsonResponse(data)
-        else:
-            key.checked = True
-            key.checked_by = user
-            key.checked_at = datetime.now()
-            key.modified_by = user
-            key.save()
-            # This is just to play along with the existing code
-            data['form_is_valid'] = True
-            pending_gene_keys = GeneKey.objects.all().exclude(
-                checked=True).order_by('-added_at')
-            data['html_key_list_pending'] = render_to_string('main/includes/partial_key_list_pending.html', {
-                'panel': panel,
-                'pending_gene_keys': pending_gene_keys,
-                'user': user
-            })
+        key.checked = True
+        key.checked_by = user
+        key.checked_at = datetime.now()
+        key.modified_by = user
+        key.save()
+        # This is just to play along with the existing code
+        data['form_is_valid'] = True
+        pending_gene_keys = GeneKey.objects.all().exclude(
+            checked=True).order_by('-added_at')
+        data['html_key_list_pending'] = render_to_string('main/includes/partial_key_list_pending.html', {
+            'panel': panel,
+            'pending_gene_keys': pending_gene_keys,
+            'user': user
+        })
     else:
         context = {
             'panel': panel,
@@ -329,13 +320,20 @@ def key_accept(request, pk, key):
 
 
 def key_delete(request, pk, key):
+    data = dict()
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     key = get_object_or_404(GeneKey, pk=key)
-    data = dict()
+    if key.checked:
+        data['form_is_valid'] = False
+        context = {
+            'panel': panel}
+        data['html_form'] = render_to_string(
+            'main/includes/partial_key_is_accepted.html', context)
+        return JsonResponse(data)
+
     if request.method == 'POST':
-        if not key.checked:
-            key.delete()
+        key.delete()
         # This is just to play along with the existing code
         data['form_is_valid'] = True
         pending_gene_keys = GeneKey.objects.all().exclude(

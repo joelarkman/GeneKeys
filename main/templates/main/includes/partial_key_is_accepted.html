@@ -1,0 +1,9 @@
+<div class="header">Error</div>
+<div class="content">
+    <div class="ui error message">
+        <p>The key you are trying to delete has already been accepted by another user.</p>
+    </div>
+</div>
+<div class="actions">
+    <a class="ui negative button" href="{% url 'pending_keys' pk=panel.id %}">Reload page</a>
+</div>
