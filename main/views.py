@@ -128,7 +128,7 @@ def key_archive(request, pk, key):
         context = {
             'panel': panel}
         data['html_form'] = render_to_string(
-            'main/includes/partial_key_is_archived.html', context)
+            'main/includes/errors/partial_error_cant_archive.html', context)
         return JsonResponse(data)
 
     if request.method == 'POST':
@@ -234,7 +234,7 @@ def save_key_comment_form(request, form, template_name, pk, key, stored_time):
         context = {
             'panel': panel}
         data['html_form'] = render_to_string(
-            'main/includes/partial_key_is_archived.html', context)
+            'main/includes/errors/partial_error_cant_comment.html', context)
         return JsonResponse(data)  # Return warning modal.
 
     if request.method == 'POST':
@@ -299,7 +299,15 @@ def key_accept(request, pk, key):
         context = {
             'panel': panel}
         data['html_form'] = render_to_string(
-            'main/includes/partial_key_doesnt_exist.html', context)
+            'main/includes/errors/partial_error_cant_accept_deleted.html', context)
+        return JsonResponse(data)
+
+    if key.checked:
+        data['form_is_valid'] = False
+        context = {
+            'panel': panel}
+        data['html_form'] = render_to_string(
+            'main/includes/errors/partial_error_cant_accept_accepted.html', context)
         return JsonResponse(data)
 
     if request.method == 'POST':
@@ -331,13 +339,21 @@ def key_delete(request, pk, key):
     data = dict()
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
-    key = get_object_or_404(GeneKey, pk=key)
+    try:
+        key = get_object_or_404(GeneKey, pk=key)
+    except:
+        context = {
+            'panel': panel}
+        data['html_form'] = render_to_string(
+            'main/includes/errors/partial_error_cant_delete_deleted.html', context)
+        return JsonResponse(data)
+
     if key.checked:
         data['form_is_valid'] = False
         context = {
             'panel': panel}
         data['html_form'] = render_to_string(
-            'main/includes/partial_key_is_accepted.html', context)
+            'main/includes/errors/partial_error_cant_delete_accepted.html', context)
         return JsonResponse(data)
 
     if request.method == 'POST':
