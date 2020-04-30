@@ -67,7 +67,7 @@ class KeyCommentForm(forms.ModelForm):
         model = GeneKey
 
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 4, 'cols': 20}),
+            'comment': forms.Textarea(attrs={'rows': 5, 'cols': 20}),
         }
 
         fields = ('comment',)
