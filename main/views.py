@@ -1,5 +1,6 @@
 import xlwt
 from datetime import datetime
+from django.utils import timezone
 from rest_framework import generics
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -129,11 +130,11 @@ def key_archive(request, pk, key):
         data['html_form'] = render_to_string(
             'main/includes/partial_key_is_archived.html', context)
         return JsonResponse(data)
-    
+
     if request.method == 'POST':
         key.archived = True
         key.archived_by = user
-        key.archived_at = datetime.now()
+        key.archived_at = timezone.now()
         key.modified_by = user
         key.save()
         # This is just to play along with the existing code
@@ -304,7 +305,7 @@ def key_accept(request, pk, key):
     if request.method == 'POST':
         key.checked = True
         key.checked_by = user
-        key.checked_at = datetime.now()
+        key.checked_at = timezone.now()
         key.modified_by = user
         key.save()
         # This is just to play along with the existing code
