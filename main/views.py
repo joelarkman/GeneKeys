@@ -162,7 +162,7 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene, q_set, st
     data = dict()
     if request.method == 'POST':
         if form.is_valid():
-            if stored_time != panel_gene.modified_at.strftime("%Y-%m-%d__%H-%M-%S"):
+            if stored_time != panel_gene.modified_at.strftime("%Y-%m-%d__%H-%M-%S.%f"):
                 data['form_is_valid'] = False
                 context = {'user': user,
                            'panel': panel,
@@ -223,7 +223,7 @@ def save_key_comment_form(request, form, template_name, pk, key, stored_time):
     if request.method == 'POST':
         if form.is_valid():
             # Check if stored last modified time is different to the database value.
-            if stored_time != key.modified_at.strftime("%Y-%m-%d__%H-%M-%S"):
+            if stored_time != key.modified_at.strftime("%Y-%m-%d__%H-%M-%S.%f"):
                 # If it has been modified check if it has been archived.
                 if key.archived:
                     context = {

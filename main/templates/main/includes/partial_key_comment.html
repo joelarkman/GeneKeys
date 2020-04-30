@@ -10,7 +10,7 @@
         class="js-key-comment-form ">
         {% csrf_token %}
         {% include 'main/includes/partial_key_comment_form.html' %}
-        <input type="hidden" name="stored_time" value="{{key.modified_at|date:'Y-m-d__H-i-s'}}" />
+        <input type="hidden" name="stored_time" value="{{key.modified_at|date:'Y-m-d__H-i-s.u'}}" />
     </form>
     <span class='ui grey small text' style="text-align: left"> Last modified by {{ key.modified_by }}
         ({{ key.modified_at|naturaltime }})</span>
