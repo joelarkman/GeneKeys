@@ -94,13 +94,13 @@ class GeneAdmin(admin.ModelAdmin):
 
             # This code ensures only one transcript can be set as default (for each gene).
             # If one transcript is added, it is set to default if there is no current default.
-            if not instance.use_by_default and len(instances) == 1:
+            if len(instances) == 1 and not instance.use_by_default:
                 if Transcript.objects.filter(Gene=instance.Gene, use_by_default=True).count() == 0:
                     instance.use_by_default = True
-            with transaction.atomic():
-                Transcript.objects.filter(Gene=instance.Gene).filter(
-                    use_by_default=True).update(use_by_default=False)
-
+            if instance.use_by_default:
+                with transaction.atomic():
+                    Transcript.objects.filter(Gene=instance.Gene).filter(
+                        use_by_default=True).update(use_by_default=False)
             instance.save()
         formset.save_m2m()
 
