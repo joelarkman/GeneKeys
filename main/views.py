@@ -155,25 +155,38 @@ def key_archive(request, pk, key):
     return JsonResponse(data)
 
 
-def save_panel_gene_form(request, form, template_name, pk, panel_gene, q_set):
+def save_panel_gene_form(request, form, template_name, pk, panel_gene, q_set, stored_time):
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     panel_gene = get_object_or_404(PanelGene, id=panel_gene)
     data = dict()
     if request.method == 'POST':
         if form.is_valid():
-            panel_gene = form.save(commit=False)
-            panel_gene.modified_by = user
-            panel_gene.save()
-            data['form_is_valid'] = True
-            panel_genes = PanelGene.objects.filter(
-                panel=pk).order_by('gene__name')
-            data['html_panel_gene_list'] = render_to_string('main/includes/partial_panel_gene_list.html', {
-                'panel': panel,
-                'panel_gene': panel_gene,
-                'panel_genes': panel_genes,
-                'user': user
-            })
+            if stored_time != panel_gene.modified_at.strftime("%Y-%m-%d__%H-%M-%S"):
+                data['form_is_valid'] = False
+                context = {'user': user,
+                           'panel': panel,
+                           'panel_gene': panel_gene,
+                           'form': PanelGeneForm(instance=panel_gene),
+                           'q_set': q_set,
+                           'change': True}
+                data['html_form'] = render_to_string(template_name,
+                                                     context,
+                                                     request=request)
+                return JsonResponse(data)
+            else:
+                panel_gene = form.save(commit=False)
+                panel_gene.modified_by = user
+                panel_gene.save()
+                data['form_is_valid'] = True
+                panel_genes = PanelGene.objects.filter(
+                    panel=pk).order_by('gene__name')
+                data['html_panel_gene_list'] = render_to_string('main/includes/partial_panel_gene_list.html', {
+                    'panel': panel,
+                    'panel_gene': panel_gene,
+                    'panel_genes': panel_genes,
+                    'user': user
+                })
         else:
             data['form_is_valid'] = False
     context = {'user': user,
@@ -193,11 +206,13 @@ def panel_gene_edit(request, pk, panel_gene):
     if request.method == 'POST':
         form = PanelGeneForm(request.POST, instance=item)
         form.fields['preferred_transcript'].queryset = q_set
+        stored_time = request.POST.get('stored_time')
     else:
         form = PanelGeneForm(instance=item)
         form.fields['preferred_transcript'].queryset = Transcript.objects.filter(
             Gene=item.gene.id)
-    return save_panel_gene_form(request, form, 'main/includes/partial_panel_gene_edit.html', pk, panel_gene, q_set)
+        stored_time = ''
+    return save_panel_gene_form(request, form, 'main/includes/partial_panel_gene_edit.html', pk, panel_gene, q_set, stored_time)
 
 
 def save_key_comment_form(request, form, template_name, pk, key, stored_time):
@@ -223,9 +238,10 @@ def save_key_comment_form(request, form, template_name, pk, key, stored_time):
                                'key': key,
                                'form': KeyCommentForm(instance=key),
                                'user': user,
-                               'change': 'True'}
-                    data['html_form'] = render_to_string(
-                        template_name, context, request=request)
+                               'change': True}
+                    data['html_form'] = render_to_string(template_name,
+                                                         context,
+                                                         request=request)
                     # Refresh comment modal with 'change' error.
                     return JsonResponse(data)
             else:

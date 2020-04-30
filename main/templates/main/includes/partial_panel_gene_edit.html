@@ -1,12 +1,20 @@
 {% load humanize %}
 <div class="header">Set preferred transcript</div>
 <div class="content">
+    {% if change %}
+    <div class="ui error message">
+        <p>Unable to set preferred transcript because it was recently updated by another user, please try again.</p>
+    </div>
+    {% endif %}
+
     Select the preferred <b>{{panel_gene.gene}}</b> transcript to use for the <b>{{panel}}</b> panel.
     <br><br>
+
     <form id='theform2' method="post" action="{% url 'panel_gene_edit' pk=panel.id panel_gene=panel_gene.id %}"
         class="js-edit-panel_gene-form">
         {% csrf_token %}
         {% include 'main/includes/partial_panel_gene_form.html' %}
+        <input type="hidden" name="stored_time" value="{{panel_gene.modified_at|date:'Y-m-d__H-i-s'}}" />
     </form>
     <span class='ui grey small text' style="text-align: left"> Last modified by {{ panel_gene.modified_by }}
         ({{ panel_gene.modified_at|naturaltime }})</span>
