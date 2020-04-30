@@ -241,25 +241,42 @@ def key_comment(request, pk, key):
 
 
 def key_accept(request, pk, key):
+    data = dict()
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
-    key = get_object_or_404(GeneKey, pk=key)
-    data = dict()
+    try:
+        key = get_object_or_404(GeneKey, pk=key)
+    except:
+        exception = True
+        context = {
+            'panel': panel}
+        data['html_form'] = render_to_string(
+            'main/includes/partial_key_doesnt_exist.html', context)
+        return JsonResponse(data)
+
     if request.method == 'POST':
-        key.checked = True
-        key.checked_by = user
-        key.checked_at = datetime.now()
-        key.modified_by = user
-        key.save()
-        # This is just to play along with the existing code
-        data['form_is_valid'] = True
-        pending_gene_keys = GeneKey.objects.all().exclude(
-            checked=True).order_by('-added_at')
-        data['html_key_list_pending'] = render_to_string('main/includes/partial_key_list_pending.html', {
-            'panel': panel,
-            'pending_gene_keys': pending_gene_keys,
-            'user': user
-        })
+        if exception:
+            data['form_is_valid'] = False
+            context = {
+                'panel': panel}
+            data['html_form'] = render_to_string(
+                'main/includes/partial_key_doesnt_exist.html', context)
+            return JsonResponse(data)
+        else:
+            key.checked = True
+            key.checked_by = user
+            key.checked_at = datetime.now()
+            key.modified_by = user
+            key.save()
+            # This is just to play along with the existing code
+            data['form_is_valid'] = True
+            pending_gene_keys = GeneKey.objects.all().exclude(
+                checked=True).order_by('-added_at')
+            data['html_key_list_pending'] = render_to_string('main/includes/partial_key_list_pending.html', {
+                'panel': panel,
+                'pending_gene_keys': pending_gene_keys,
+                'user': user
+            })
     else:
         context = {
             'panel': panel,

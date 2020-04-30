@@ -59,6 +59,10 @@
                     }
                     else {
                         $("#modal-keys").html(data.html_form);
+                        $('#modal-keys').modal({
+                            centered: false,
+                            autofocus: false
+                        }).modal('show');
                     }
                 }
             });
