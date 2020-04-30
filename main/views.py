@@ -200,26 +200,47 @@ def panel_gene_edit(request, pk, panel_gene):
     return save_panel_gene_form(request, form, 'main/includes/partial_panel_gene_edit.html', pk, panel_gene, q_set)
 
 
-def save_key_comment_form(request, form, template_name, pk, key):
+def save_key_comment_form(request, form, template_name, pk, key, stored_time):
     user = request.user
     panel = get_object_or_404(Panel, pk=pk)
     key = get_object_or_404(GeneKey, pk=key)
     data = dict()
     if request.method == 'POST':
         if form.is_valid():
-            if not key.archived:
+            # Check if stored last modified time is different to the database value.
+            if stored_time != key.modified_at.strftime("%Y-%m-%d__%H-%M-%S"):
+                # If it has been modified check if it has been archived.
+                if key.archived:
+                    context = {
+                        'panel': panel}
+                    data['html_form'] = render_to_string(
+                        'main/includes/partial_key_is_archived.html', context)
+                    return JsonResponse(data)  # Return warning modal.
+                else:
+                    # If its been modified but not archived.
+                    data['form_is_valid'] = False
+                    context = {'panel': panel,
+                               'key': key,
+                               'form': KeyCommentForm(instance=key),
+                               'user': user,
+                               'change': 'True'}
+                    data['html_form'] = render_to_string(
+                        template_name, context, request=request)
+                    # Refresh comment modal with 'change' error.
+                    return JsonResponse(data)
+            else:
                 comment = form.save(commit=False)
                 comment.modified_by = user
                 comment.save()
-            data['form_is_valid'] = True
-            active_gene_keys = GeneKey.objects.filter(
-                panel=panel.id).exclude(archived=True).exclude(checked=False).order_by('-added_at')
-            data['html_key_list_active'] = render_to_string('main/includes/partial_key_list_active.html', {
-                'panel': panel,
-                'active_gene_keys': active_gene_keys,
-                'key': key,
-                'user': user
-            })
+                data['form_is_valid'] = True
+                active_gene_keys = GeneKey.objects.filter(
+                    panel=panel.id).exclude(archived=True).exclude(checked=False).order_by('-added_at')
+                data['html_key_list_active'] = render_to_string('main/includes/partial_key_list_active.html', {
+                    'panel': panel,
+                    'active_gene_keys': active_gene_keys,
+                    'key': key,
+                    'user': user
+                })
         else:
             data['form_is_valid'] = False
     context = {'panel': panel,
@@ -235,9 +256,12 @@ def key_comment(request, pk, key):
     instance = get_object_or_404(GeneKey, pk=key)
     if request.method == 'POST':
         form = KeyCommentForm(request.POST, instance=instance)
+        # Extract stored time value from hidden form input.
+        stored_time = request.POST.get('stored_time')
     else:
         form = KeyCommentForm(instance=instance)
-    return save_key_comment_form(request, form, 'main/includes/partial_key_comment.html', pk, key)
+        stored_time = ''
+    return save_key_comment_form(request, form, 'main/includes/partial_key_comment.html', pk, key, stored_time)
 
 
 def key_accept(request, pk, key):

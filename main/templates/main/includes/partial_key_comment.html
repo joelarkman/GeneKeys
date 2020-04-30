@@ -1,10 +1,16 @@
 {% load humanize %}
 <div class="header">Comment for {{key}}</div>
 <div class="content">
+    {% if change %}
+    <div class="ui error message">
+        <p>Unable to save changes because a more recent version is available, please try again.</p>
+    </div>
+    {% endif %}
     <form id='theform3' method="post" action="{% url 'key_comment' pk=panel.id key=key.id %}"
         class="js-key-comment-form ">
         {% csrf_token %}
         {% include 'main/includes/partial_key_comment_form.html' %}
+        <input type="hidden" name="stored_time" value="{{key.modified_at|date:'Y-m-d__H-i-s'}}" />
     </form>
     <span class='ui grey small text' style="text-align: left"> Last modified by {{ key.modified_by }}
         ({{ key.modified_at|naturaltime }})</span>
