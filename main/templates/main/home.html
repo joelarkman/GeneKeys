@@ -28,9 +28,9 @@
 
 <!-- Panel cards -->
 <div class="ui main container">
-    <div class="ui stretched three column grid">
 
-        {% if panels %}
+    {% if panels %}
+    <div class="ui stretched three column grid">
         {% for panel in panels %}
         <div class="column">
             <a class="ui fluid link card" href="{% url 'panel_keys' panel.pk %}">
@@ -48,15 +48,16 @@
             </a>
         </div>
         {% endfor %}
-        {% else %}
-        <!-- Warning Message -->
-        <div class="ui info message">
-            <p>No panels added yet. Plase navigate to the admin site and consult the standard operating procedure to get
-                started.</p>
-        </div>
-        {% endif %}
-
     </div>
+
+    {% else %}
+    <!-- Warning Message -->
+    <div class="ui info message">
+        <p>No panels added yet. Plase navigate to the admin site and consult with the standard operating procedure to
+            get started.</p>
+    </div>
+    {% endif %}
+
 </div>
 
 {% endblock content %}
