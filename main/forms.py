@@ -21,10 +21,10 @@ class AddKeyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
 
-        if kwargs.get('instance'):
-            initial = kwargs.setdefault('initial', {})
-            initial['genes'] = [
-                gene.pk for gene in kwargs['instance'].genes.all()]
+        # if kwargs.get('instance'):
+        #     initial = kwargs.setdefault('initial', {})
+        #     initial['genes'] = [
+        #         gene.pk for gene in kwargs['instance'].genes.all()]
 
         forms.ModelForm.__init__(self, *args, **kwargs)
         self.fields['genes'].queryset = Gene.objects.none()
