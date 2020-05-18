@@ -79,7 +79,7 @@ class PanelGene(models.Model):
     active_keys.short_description = "Active Keys"
 
     def __str__(self):
-        return f'Panel: {self.panel}; Gene:  {self.gene}'
+        return f'Panel: {self.panel}; Gene: {self.gene}'
 
 
 class GeneKey(models.Model):
