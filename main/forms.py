@@ -59,7 +59,6 @@ class PanelGeneForm(forms.ModelForm):
     class Meta:
         model = PanelGene
         fields = ('preferred_transcript',)
-        #fields = ('panel', 'gene', 'preferred_transcript')
 
 
 class KeyCommentForm(forms.ModelForm):
@@ -67,7 +66,7 @@ class KeyCommentForm(forms.ModelForm):
         model = GeneKey
 
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 5, 'cols': 20}),
+            'comment': forms.Textarea(attrs={'rows': 5, 'cols': 20, 'placeholder': 'No comment added yet'}),
         }
 
         fields = ('comment',)
