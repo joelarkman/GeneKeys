@@ -84,7 +84,7 @@ class PanelGene(models.Model):
 
 class GeneKey(models.Model):
     panel = models.ForeignKey(
-        'panel', related_name='GeneKey', on_delete=models.CASCADE)
+        'panel', related_name='gene_keys', on_delete=models.CASCADE)
     key = models.CharField(max_length=20, unique=True)
     genes = models.ManyToManyField('Gene', related_name='gene_keys')
     added_at = models.DateTimeField(auto_now_add=True)
