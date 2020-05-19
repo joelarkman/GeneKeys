@@ -12,7 +12,7 @@ class TestAddKeyForm(TestCase):
 
     # Define a panel and two genes, add one of the genes to the panel.
     def setUp(self):
-        self.panel = mixer.blend('main.Panel', name='Panel_1')
+        self.panel = mixer.blend('main.Panel', name='PANEL_1')
         self.gene_on_panel = mixer.blend('main.Gene', name='Gene_1')
         self.gene_not_on_panel = mixer.blend('main.Gene', name='Gene_2')
         self.panel_gene = mixer.blend(
@@ -27,7 +27,7 @@ class TestAddKeyForm(TestCase):
             'comment': 'example comment'
         })
 
-        self.assertTrue(form.is_valid()), form.errors
+        self.assertTrue(form.is_valid())
 
     # Test the form is invalid when a key is created which relates to a gene that is not on the panel.
     def test_AddKey_form_invalid_gene(self):
@@ -38,7 +38,7 @@ class TestAddKeyForm(TestCase):
             'comment': 'example comment'
         })
 
-        self.assertFalse(form.is_valid()), form.errors
+        self.assertFalse(form.is_valid())
 
     #  Test the form is invalid when a valid panel is not provided.
     def test_AddKey_form_invalid_panel(self):
@@ -49,7 +49,7 @@ class TestAddKeyForm(TestCase):
             'comment': 'example comment'
         })
 
-        self.assertFalse(form.is_valid()), form.errors
+        self.assertFalse(form.is_valid())
 
     # Test a valid form correctly saves, the added object exists and its genes match to the provided input.
     def test_AddKey_form_save(self):

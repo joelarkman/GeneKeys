@@ -9,7 +9,7 @@ from main.models import Panel, Gene, Transcript, PanelGene, GeneKey
 class TestModels(TestCase):
 
     def setUp(self):
-        self.panel = mixer.blend('main.Panel', name='Panel_1')
+        self.panel = mixer.blend('main.Panel', name='PANEL_1')
         self.gene = mixer.blend('main.Gene', name='Gene_1')
         self.transcript = mixer.blend('main.Transcript', name='Transcript_1')
         self.gene_key = mixer.blend(
@@ -32,7 +32,7 @@ class TestModels(TestCase):
     def test_PanelGene_creation(self):
         self.assertTrue(isinstance(self.panel_gene, PanelGene))
         self.assertEqual(self.panel_gene.__str__(),
-                         'Panel: Panel_1; Gene: Gene_1')
+                         'Panel: PANEL_1; Gene: Gene_1')
         self.assertEqual(self.panel_gene.active_keys(), 'GeneKey_1')
 
     def test_GeneKey_creation(self):
