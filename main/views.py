@@ -236,6 +236,7 @@ def save_key_comment_form(request, form, template_name, pk, key, stored_time):
 
     # If the key has now been archived by another user, return a relevent error message modal as a JsonResponse.
     if key.archived:
+        data['form_is_valid'] = False
         context = {
             'panel': panel}
         data['html_form'] = render_to_string(
@@ -271,9 +272,6 @@ def save_key_comment_form(request, form, template_name, pk, key, stored_time):
                 comment.save()
                 # Set form to valid to inform ajax to close modal.
                 data['form_is_valid'] = True
-        else:
-            # If form not valid set it to False, ajax will reload form.
-            data['form_is_valid'] = False
     # Initially add html for comment form modal to data, with the ability to view and modify the key's comment.
     context = {'panel': panel,
                'key': key,
@@ -358,9 +356,6 @@ def save_panel_gene_form(request, form, template_name, pk, panel_gene, q_set, st
                     'panel_genes': panel_genes,
                     'user': user
                 })
-        else:
-            # If form not valid set it to False, ajax will reload form.
-            data['form_is_valid'] = False
     # Initially add html for PanelGeneForm modal to data, with the ability to view and modify the preferred transctipt.
     context = {'user': user,
                'panel': panel,
@@ -388,6 +383,7 @@ def key_accept(request, pk, key):
     # If this fails, assume the key had been deleted by another user.
     except:
         # Return relevent error message as JsonResponse.
+        data['form_is_valid'] = False
         context = {
             'panel': panel}
         data['html_form'] = render_to_string(
@@ -451,6 +447,7 @@ def key_delete(request, pk, key):
     # If this fails, assume the key had already been deleted by another user.
     except:
         # Return relevent error message as JsonResponse.
+        data['form_is_valid'] = False
         context = {
             'panel': panel}
         data['html_form'] = render_to_string(
