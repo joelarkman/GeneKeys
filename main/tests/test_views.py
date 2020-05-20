@@ -1,4 +1,4 @@
-from django.test import TestCase, Client, RequestFactory
+from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from mixer.backend.django import mixer
 from django.utils import timezone
@@ -14,7 +14,7 @@ from main.serializers import PanelSerializer, GeneKeySerializer, PanelGeneSerial
 ##### Main Views #####
 ######################
 
-
+@pytest.mark.django_db
 class TestHomeView(TestCase):
 
     def setUp(self):
