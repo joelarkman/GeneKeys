@@ -21,7 +21,7 @@ from .serializers import PanelSerializer, GeneKeySerializer, PanelGeneSerializer
 
 def home(request):
     # Retrieve all Panels.
-    panels = Panel.objects.all()
+    panels = Panel.objects.all().order_by('added_at')
 
     context = {
         'panels': panels
@@ -115,7 +115,7 @@ def generate_output(request, pk):
     # Retrieve selected panel.
     panel = get_object_or_404(Panel, pk=pk)
     # Retrieve all panels.
-    panels = Panel.objects.all()
+    panels = Panel.objects.all().order_by('added_at')
 
     context = {
         'title': 'Generate output files',
@@ -572,7 +572,7 @@ def generate_excel(request, pk):
     for row in active_gene_keys:
         row_num += 1
         ws.write(row_num, 0, row.key, font_style)
-        ws.write(row_num, 1, row.gene_names(), font_style)
+        ws.write(row_num, 1, row.gene_names().replace(" ", ""), font_style)
         ws.write(row_num, 2, row.panel.name, font_style)
         ws.write(row_num, 3, row.added_by.username, font_style)
         ws.write(row_num, 4, row.added_at.strftime('%d/%m/%Y'), font_style)
