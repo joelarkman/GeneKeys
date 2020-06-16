@@ -9,16 +9,20 @@
     <td data-label="" class='right aligned'>
 
         <div class="ui icon buttons">
-            <button type="button" data-tooltip="Delete {{key.key}}" data-variation='small'
-                class="ui negative negative button js-delete-key {% if not user.is_authenticated %} disabled {%endif%}"
-                data-url="{% url 'key_delete' pk=panel.id key=key.id %}">
-                <i class="trash icon"></i>
-            </button>
-            <button type="button" data-tooltip="Accept {{key.key}}" data-variation='small'
-                class="ui positive button js-accept-key {% if user.is_authenticated and key.added_by == user %}disabled{%endif%}"
-                data-url="{% url 'key_accept' pk=panel.id key=key.id %}">
-                <i class="check icon"></i>
-            </button>
+            <div>
+                <button style='margin-right: 8px;' type="button" data-tooltip="Delete {{key.key}}" data-variation='small'
+                    class="ui negative negative button js-delete-key {% if not user.is_authenticated %} disabled {%endif%}"
+                    data-url="{% url 'key_delete' pk=panel.id key=key.id %}">
+                    <i class="trash icon"></i>
+                </button>
+            </div>
+            <div {% if user.is_authenticated and key.added_by == user %} data-tooltip="Another user must check {{key.key}}" data-variation='small' {%endif%}>
+                <button type="button" data-tooltip="Accept {{key.key}}" data-variation='small'
+                    class="ui positive button js-accept-key {% if user.is_authenticated and key.added_by == user %}disabled{%endif%}"
+                    data-url="{% url 'key_accept' pk=panel.id key=key.id %}">
+                    <i class="check icon"></i>
+                </button>
+            </div>
         </div>
 
     </td>

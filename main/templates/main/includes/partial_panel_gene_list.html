@@ -5,12 +5,13 @@
     <td data-label="Relevant active keys">{{ panel_gene.active_keys }}</td>
     <td data-label="Edit" class="center aligned">
 
-        <button type='button' data-tooltip="Set preferred transcript" data-variation='small'
-            class="ui icon primary button js-edit-panel_gene {% if not user.is_authenticated %} disabled {%endif%}"
-            data-url='{% url "panel_gene_edit" pk=panel.id panel_gene=panel_gene.id %}'>
-            <i class="edit icon"></i>
-        </button>
-
+        <div {% if not user.is_authenticated %} data-tooltip="Log in to set preferred transcript" data-variation='small'{%endif%}>
+            <button type='button' data-tooltip="Set preferred transcript" data-variation='small'
+                class="ui icon primary button js-edit-panel_gene {% if not user.is_authenticated %} disabled {%endif%}"
+                data-url='{% url "panel_gene_edit" pk=panel.id panel_gene=panel_gene.id %}'>
+                <i class="edit icon"></i>
+            </button>
+        </div>
     </td>
 </tr>
 {% endfor %}
