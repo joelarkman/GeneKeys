@@ -74,7 +74,7 @@ class TestPendingKeysPage(StaticLiveServerTestCase):
 
         # Test table placeholder for no active keys
         key = self.browser.find_element_by_xpath(
-            '//*[@id="pending-keys-table"]/tbody/tr[1]/td[1]').text
+            '//*[@id="pending-keys-table"]/tbody/tr/td[1]').text
 
         self.assertEqual(key,
                          'GeneKey_1')
