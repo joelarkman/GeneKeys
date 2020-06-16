@@ -119,7 +119,7 @@ class TestPanelKeysPage(StaticLiveServerTestCase):
 
         # Test clicking view comment
         self.browser.find_element_by_xpath(
-            '//*[@id="active-keys-table"]/tbody/tr[1]/td[7]/div/button[2]').click()
+            '//*[@id="active-keys-table"]/tbody/tr[1]/td[7]/div/div[2]/button').click()
 
         time.sleep(1)
 
@@ -136,7 +136,7 @@ class TestPanelKeysPage(StaticLiveServerTestCase):
 
         # Test clicking view comment
         self.browser.find_element_by_xpath(
-            '//*[@id="active-keys-table"]/tbody/tr[1]/td[7]/div/button[1]').click()
+            '//*[@id="active-keys-table"]/tbody/tr[1]/td[7]/div/div[1]/button').click()
 
         time.sleep(1)
 
@@ -156,7 +156,7 @@ class TestPanelKeysPage(StaticLiveServerTestCase):
 
         # Test clicking view comment
         self.browser.find_element_by_xpath(
-            '//*[@id="panel-genes-table"]/tbody/tr[1]/td[4]/button').click()
+            '//*[@id="panel-genes-table"]/tbody/tr[1]/td[4]/div/button').click()
 
         time.sleep(1)
 
