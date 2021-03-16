@@ -18,12 +18,35 @@ from django.urls import path, include
 from accounts import views as accounts_views
 from django.contrib.auth import views as auth_views
 
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="GeneKeys API",
+        default_version='v1',
+        description="Example API Endpoints",
+        # terms_of_service="https://www.google.com/policies/terms/",
+        # contact=openapi.Contact(email="contact@snippets.local"),
+        # license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('', include('django.contrib.auth.urls')),
     path('signup/', accounts_views.signup, name='signup'),
     path('login/<int:r>/', auth_views.LoginView.as_view(
-  extra_context={'r':'r'}
-)),
+        extra_context={'r': 'r'}
+    )),
+
+    path('api/', schema_view.with_ui('swagger',
+                                     cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc',
+                                       cache_timeout=0), name='schema-redoc'),
 ]

@@ -54,7 +54,9 @@ urlpatterns = [
     ###############
 
 
-    path('api/',
+    path('api/panels/all',
+         views.PanelAPIView.as_view(), kwargs={'id': None}),
+    path('api/panels/<id>',
          views.PanelAPIView.as_view()),
     path('api/<panel>/active_keys',
          views.GeneKeyAPIView.as_view()),

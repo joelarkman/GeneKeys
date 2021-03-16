@@ -68,7 +68,7 @@ def add_key(request, pk):
         form = AddKeyForm(request.POST)
         # If form populated with valid information...
         if form.is_valid():
-            # Initiate form sabing.
+            # Initiate form saving.
             genekey = form.save(commit=False)
             # Override added_by field to authorised user.
             genekey.added_by = user
@@ -92,7 +92,7 @@ def add_key(request, pk):
     return render(request, 'main/add_key.html', context)
 
 
-@login_required # Page requires authorisation.
+@login_required  # Page requires authorisation.
 def pending_keys(request, pk):
     # Retrieve selected panel.
     panel = get_object_or_404(Panel, pk=pk)
@@ -611,11 +611,13 @@ class PanelAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         # Set queryset to blank initially.
-        queryset = Panel.objects.none()
+        queryset = Panel.objects.all()
         # Check is user has made a panel query.
-        panel = self.request.query_params.get('panel', None)
+
+        panel = self.kwargs['id']
+
         # If they have...
-        if panel is not None:
+        if panel:
             try:
                 # try converying it to a number and using that to extract a panel.
                 panel = float(panel)
